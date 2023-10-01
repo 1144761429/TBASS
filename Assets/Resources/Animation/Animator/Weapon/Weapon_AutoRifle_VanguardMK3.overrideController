@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Weapon_AutoRifle_VanguardMK3
+  m_Controller: {fileID: 9100000, guid: 6b457d0275153fd40ae5db02ba79a110, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 74e6684f52c674047b5c78e8fcd657f2, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ebbc2ffa2bb96ca46a16d753e6473329, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a5b4a01174051fb4a897f45114f7a369, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: dbd40d9c5a0968d41ae8fddb0ae7e522, type: 2}

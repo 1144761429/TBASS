@@ -1,0 +1,7 @@
+﻿[
+  {
+    "ID": 100001,
+    "Name": "DamageIncrease",
+    "SpritePath": "Sprites/BuffIcon/SPRT_buffIcon_AttackIncrease"
+  }
+]
