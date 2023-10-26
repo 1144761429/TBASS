@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using WeaponSystem;
 
@@ -19,6 +21,10 @@ namespace UISystem
 
         private void Start()
         {
+            PlayerLoadout = GameObject.FindWithTag("PlayerLoadout").GetComponent<Loadout>();
+            PlayerLoadout.OnChangeWeapon += UpdateVisual;
+                
+            
             CurrentWeaponSlot = _primarySlot;
             UpdateSlotsHierarchy();
             UpdateSlotsPosition();
@@ -27,7 +33,17 @@ namespace UISystem
         public override void Init()
         {
             InitSlots();
-            PlayerLoadout.OnSwitchWeapon += UpdateCurrentSlot;
+            PlayerLoadout.OnSwitchWeapon += UpdateSlot;
+        }
+
+        public void UpdateVisual(Weapon c, Weapon n)
+        {
+            _primarySlot.UpdateWeaponData();
+            _secondarySlot.UpdateWeaponData();
+            _adeptSlot.UpdateWeaponData();
+            _primarySlot.UpdateWeaponIcon();
+            _secondarySlot.UpdateWeaponIcon();
+            _adeptSlot.UpdateWeaponIcon();
         }
 
         /// <summary>
@@ -39,18 +55,20 @@ namespace UISystem
             PlayerLoadout = GameObject.Find("Player Loadout").GetComponent<Loadout>();
 
             // Set the Weapon reference to each of the slots
-            _primarySlot.SetWeapon(GameObject.Find("Primary Weapon").GetComponent<Weapon>());
-            _secondarySlot.SetWeapon(GameObject.Find("Secondary Weapon").GetComponent<Weapon>());
-            _adeptSlot.SetWeapon(GameObject.Find("Adept Weapon").GetComponent<Weapon>());
+            Loadout playerLoadout = GameObject.FindWithTag("PlayerLoadout").GetComponent<Loadout>();
+            
+            _primarySlot.SetWeapon(playerLoadout.PrimaryWeapon);
+            _secondarySlot.SetWeapon(playerLoadout.SecondaryWeapon);
+            _adeptSlot.SetWeapon(playerLoadout.AdeptWeapon);
 
             _primarySlot.Init();
             _secondarySlot.Init();
             _adeptSlot.Init();
         }
 
-        private void UpdateCurrentSlot()
+        private void UpdateSlot(ELoadoutWeaponType loadoutWeaponType)
         {
-            switch (PlayerLoadout.CurrentWeaponEnum)
+            switch (loadoutWeaponType)
             {
                 case ELoadoutWeaponType.Primary:
                     CurrentWeaponSlot = _primarySlot;

@@ -1393,6 +1393,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas Screen Space UI
       objectReference: {fileID: 0}
+    - target: {fileID: 6971435033314744351, guid: f1bd0c15b3186724abdf03fdcaf790e6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: f1bd0c15b3186724abdf03fdcaf790e6, type: 3}
@@ -1567,7 +1571,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1472135042
 Transform:
   m_ObjectHideFlags: 0
@@ -2189,6 +2193,11 @@ Canvas:
   m_SortingLayerID: -967524841
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!1 &1973844106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6965156569277118439, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+  m_PrefabInstance: {fileID: 6965156570582869268}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1999440339
 GameObject:
   m_ObjectHideFlags: 0
@@ -2235,6 +2244,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2031269727 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6965156570003955172, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+  m_PrefabInstance: {fileID: 6965156570582869268}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6965156570582869268
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2243,17 +2257,57 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1157876229319899337, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157876229319899346, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: id
+      value: 100003
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157876229319899346, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: weaponID
+      value: 100002
+      objectReference: {fileID: 0}
     - target: {fileID: 1157876229319899346, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: _weaponID
       value: 100002
       objectReference: {fileID: 0}
     - target: {fileID: 1157876229319899346, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <ID>k__BackingField
+      value: 100003
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157876229319899346, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <BulletSpawn>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157876229319899346, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: <BulletParent>k__BackingField
       value: 
       objectReference: {fileID: 383778697}
+    - target: {fileID: 5088487858058852356, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088487858058852383, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: id
+      value: 100004
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088487858058852383, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: weaponID
+      value: 100004
+      objectReference: {fileID: 0}
     - target: {fileID: 5088487858058852383, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: _weaponID
       value: 100004
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088487858058852383, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <ID>k__BackingField
+      value: 100004
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088487858058852383, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <BulletSpawn>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5088487858058852383, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: <BulletParent>k__BackingField
@@ -2264,13 +2318,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 51784fb24c04f9247884a972d438ec7f, type: 2}
     - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: id
+      value: 100001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: weaponID
+      value: 100001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: _weaponID
       value: 100001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: DependencyHandler
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <ID>k__BackingField
+      value: 100001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <Wielder>k__BackingField
+      value: 
+      objectReference: {fileID: 1973844106}
+    - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <BulletSpawn>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6965156569022630404, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: <BulletParent>k__BackingField
       value: 
       objectReference: {fileID: 255928894}
+    - target: {fileID: 6965156569022630431, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6965156569277118433, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -2319,9 +2401,45 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6965156569277118447, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: graphicRep
+      value: 
+      objectReference: {fileID: 2031269727}
+    - target: {fileID: 6965156570560953711, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_TagString
+      value: PlayerLoadout
+      objectReference: {fileID: 0}
     - target: {fileID: 6965156570582869271, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
       propertyPath: WeaponInput
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997398757401245046, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997398757401245046, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1332584191
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997398757999427560, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997398757999427560, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997398757999427560, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997398757999427567, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997398757999427567, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}
+      propertyPath: <PrimaryWeaponID>k__BackingField
+      value: 100001
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1445745406, guid: 51ef30ba2c43ca24faa3abaf5122761a, type: 3}

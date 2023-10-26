@@ -3,14 +3,17 @@ using System;
 public interface IChargeable
 {
     Func<bool> ChargeCondition { get; set; }
-    Action ChargeStartCallback { get; set; }
-    Action OnChargingCallback { get; set; }
-    Action FullyChargedCallback { get; set; }
-    Action ChargeCancelCallback { get; set; }
-    Action OnPauseCallback { get; set; }
-    Action OnResumeCallback { get; set; }
+    Action OnChargeStart { get; set; }
+    Action OnCharging { get; set; }
+    Action OnFullyCharged { get; set; }
+    Action OnChargeCancel { get; set; }
+    Action OnFreeze { get; set; }
+    Action OnUnfreeze { get; set; }
 
 
+    /// <summary>
+    /// How much progress has been charged.
+    /// </summary>
     float ChargeProgress { get; set; }
 
     /// <summary>
@@ -24,14 +27,12 @@ public interface IChargeable
     float ChargeThreshold { get; set; }
 
     bool CanBePaused { get; set; }
-    bool IsPaused { get; }
-
-    float CurrentChargePercentage => ChargeProgress / ChargeThreshold;
+    bool IsFrozen { get; }
 
     /// <summary>
     /// Reset the progress of the charger.
     /// </summary>
     void Reset();
 
-    void SetIsPaused(bool isPaused);
+    void SetIsFrozen(bool isFrozen);
 }

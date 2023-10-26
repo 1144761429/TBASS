@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4059920990290574081}
   - component: {fileID: 4059920990290574109}
+  - component: {fileID: 1647025332593526945}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -44,6 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29bcd386341458b43a006d64cada92cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponID: 0
   <Wielder>k__BackingField: {fileID: 0}
-  _weaponID: 0
   <BulletParent>k__BackingField: {fileID: 0}
+  DependencyHandler: {fileID: 1647025332593526945}
+--- !u!114 &1647025332593526945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4059920990290574086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eca42ee75ce25742a20e7d2c4315ec0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootingModule: {fileID: 0}

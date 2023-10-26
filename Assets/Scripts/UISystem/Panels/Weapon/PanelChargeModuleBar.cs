@@ -20,14 +20,30 @@ public class PanelChargeModuleBar : PanelBase
     public override void Init()
     {
         base.Init();
-        _playerLoadout = GameObject.Find("Player Loadout").GetComponent<Loadout>();
-
+        
+        _playerLoadout = GameObject.FindWithTag("PlayerLoadout").GetComponent<Loadout>();
         if (_playerLoadout == null)
         {
             Debug.LogError(
-                "Cannot find player loadout. Please check if the name of Player Loadout GameObject is changed.");
+                "Cannot find player loadout. Please check if Player Loadout GameObject is correctly tagged.");
             return;
         }
+
+        _playerLoadout.OnSwitchWeapon += (_) =>
+        {
+            if (_playerLoadout.CurrentWeapon.StaticData.HasChargeModule)
+            {
+                _chargeModule = _playerLoadout.CurrentWeapon.gameObject.GetComponent<ChargeModule>();
+            }
+        };
+
+        // _playerLoadout.OnChangeWeapon += () =>
+        // {
+        //     if (_playerLoadout.CurrentWeapon.StaticData.HasChargeModule)
+        //     {
+        //         _chargeModule = _playerLoadout.CurrentWeapon.gameObject.GetComponent<ChargeModule>();
+        //     }
+        // };
     }
 
     public void UpdateVisual()

@@ -120,5 +120,5 @@ MonoBehaviour:
   <ID>k__BackingField: 
   <CanClose>k__BackingField: 0
   <CanHaveMultiple>k__BackingField: 0
-  maxDisplayAmount: 3
+  maxDisplayAmount: 6
   buffSlotPrefab: {fileID: 1539844950616290383, guid: 18660e58aa4eeaa46a646946e2b399e4, type: 3}

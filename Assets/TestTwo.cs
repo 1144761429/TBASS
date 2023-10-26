@@ -6,4 +6,8 @@ using UnityEngine;
 
 public class TestTwo : MonoBehaviour
 {
+    public void PrintMsg()
+    {
+        print("Hi");
+    }
 }

@@ -80,6 +80,17 @@ public class DatabaseUtil
         throw new Exception($"Retrieving buff icon failed due to buff name does not exist. Buff Name: {buffName}");
     }
 
+    public static bool IsValidWeaponID(int id)
+    {
+        if (id > 100000 && id < 1000000)
+        {
+            return true;
+        }
+
+        throw new ArgumentException("Invalid Weapon ID.\n" +
+                                    $"ID: {id}");
+    }
+    
     private void InitDBDict()
     {
         string jsonItemConsumableSupply =

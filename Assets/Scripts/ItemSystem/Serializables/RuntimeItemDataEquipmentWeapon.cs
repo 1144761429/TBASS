@@ -19,14 +19,8 @@ namespace WeaponSystem
 
         public float AimAngle;
 
-        // public RuntimeItemDataEquipmentWeapon(int ammoInMag, int ammoInReserve, float aimAngle, float chargeProgress)
-        // {
-        //     AmmoInMag = ammoInMag;
-        //     AmmoInReserve = ammoInReserve;
-        //     AimAngle = aimAngle;
-        //     ChargeProgress = chargeProgress;
-        // }
-
+       
+        
         public RuntimeItemDataEquipmentWeapon(ItemDataEquipmentWeapon data)
         {
             _data = data;
@@ -35,6 +29,14 @@ namespace WeaponSystem
             AimAngle = data.DefaultAimAngle;
         }
 
+        public void Reset(ItemDataEquipmentWeapon data)
+        {
+            _data = data;
+            AmmoInMag = data.MagCapacity;
+            AmmoInReserve = data.ReserveCapacity;
+            AimAngle = data.DefaultAimAngle;
+        }
+        
         public void SetAmmo(int amount, bool ignore = false)
         {
             if (amount < 0)

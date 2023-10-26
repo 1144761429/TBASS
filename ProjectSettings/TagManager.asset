@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Tile
   - Enemy
+  - PlayerBulletSpawn
+  - PlayerInventory
+  - PlayerLoadout
+  - UIManagerScreenSpace
   layers:
   - Default
   - TransparentFX

@@ -9,6 +9,7 @@ using WeaponSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject graphicRep;
     public PlayerInputHandler InputHandler { get; private set; }
     private Rigidbody2D _rb;
     private PlayerSpeedHandler _speedHandler;
@@ -81,12 +82,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (MouseUtil.GetVector2ToMouse(transform.position).x > 0)
         {
-            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+            graphicRep.transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
 
         }
         else if (MouseUtil.GetVector2ToMouse(transform.position).x < 0)
         {
-            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+            graphicRep.transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
         }
     }
 

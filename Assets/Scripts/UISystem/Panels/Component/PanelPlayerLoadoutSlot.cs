@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace UISystem
         private readonly Vector2 SIZE_TOP = new Vector2(150, 70);
         private readonly Vector2 SIZE_MID = new Vector2(120, 56);
         private readonly Vector2 SIZE_BOT = new Vector2(96, 44);
-
+        
 
         public override void Init()
         {
@@ -55,15 +56,16 @@ namespace UISystem
 
             _runtimeWeaponData.OnReduceAmmo += UpdateAmmoInfo;
 
-            if (_weapon.TryGetComponent<AmmunitionModule>(out _ammunitionModule))
+            if (_weapon.Modules.TryGetValue(EWeaponModule.AmmunitionModule, out var module))
             {
-                _ammunitionModule.AcitonOnReload += UpdateAmmoInfo;
+                _ammunitionModule = (AmmunitionModule)module;
+                _ammunitionModule.ActionOnReload += UpdateAmmoInfo;
             }
             else
             {
                 Debug.LogWarning($"The weapon in loadout slot {gameObject.name} has no AmmunitionModule");
             }
-
+            
             UpdateWeaponData();
             UpdateWeaponIcon();
             UpdateAmmoInfo();
@@ -79,23 +81,23 @@ namespace UISystem
             HierarchicalPos = pos;
             UpdateSlotVisual();
         }
-
-        private void UpdateSlotVisual()
+        public void UpdateWeaponData()
         {
-            ChangeSize(HierarchicalPos);
-        }
-
-        private void UpdateWeaponData()
-        {
-            _weaponData = _weapon.Data;
+            _weaponData = _weapon.StaticData;
             _runtimeWeaponData = _weapon.RuntimeData;
         }
 
         public void UpdateWeaponIcon()
         {
+            print(_weaponData.Name);
             _weaponIcon.sprite = Resources.Load<Sprite>(_weaponData.SpritePath);
         }
-
+        
+        private void UpdateSlotVisual()
+        {
+            ChangeSize(HierarchicalPos);
+        }
+        
         private void UpdateAmmoInfo()
         {
             _ammoInfo.text = $"{_runtimeWeaponData.AmmoInMag} I {_runtimeWeaponData.AmmoInReserve}";
