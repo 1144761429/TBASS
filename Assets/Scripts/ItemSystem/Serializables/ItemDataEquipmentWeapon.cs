@@ -29,6 +29,7 @@ public class ItemDataEquipmentWeapon : ItemDataEquipment
     public float[] BulletSpreadAngles;
 
     public bool HasAimModule;
+    public EAimIndicatorType AimIndicatorType;
     public float DefaultAimAngle;
     public float MinAimAngle;
     public float AimSpeed;
@@ -58,6 +59,7 @@ public class ItemDataEquipmentWeapon : ItemDataEquipment
                + $"BulletSpreadAngle: {BulletSpreadAngles}\n"
                + $"-----AIMING MODULE-----\n"
                + $"HasAimModule: {HasAimModule}\n"
+               + $"AimIndicatorType: {AimIndicatorType}\n"
                + $"DefaultAimAngle: {DefaultAimAngle}\n"
                + $"MinAimAngle: {MinAimAngle}\n"
                + $"AimSpeed: {AimSpeed}\n"

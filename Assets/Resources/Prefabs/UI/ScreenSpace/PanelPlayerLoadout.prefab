@@ -56,10 +56,9 @@ MonoBehaviour:
   <ID>k__BackingField: 
   <CanClose>k__BackingField: 1
   <CanHaveMultiple>k__BackingField: 0
-  _primarySlot: {fileID: 4396862890438466973}
-  _secondarySlot: {fileID: 4396862889180285402}
-  _adeptSlot: {fileID: 4396862890251959532}
-  <PlayerLoadout>k__BackingField: {fileID: 0}
+  primarySlot: {fileID: 4396862890438466973}
+  secondarySlot: {fileID: 4396862889180285402}
+  adeptSlot: {fileID: 4396862890251959532}
 --- !u!1001 &1135575939945916840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -161,12 +160,46 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 4396862889622956839}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: ammoInfo
+      value: 
+      objectReference: {fileID: 4396862890191204605}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: panelPlayerLoadout
+      value: 
+      objectReference: {fileID: 1135575939895036081}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
       propertyPath: <HierarchicalPos>k__BackingField
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+--- !u!114 &4396862889622956839 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3658800647025066639, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+  m_PrefabInstance: {fileID: 1135575939945916840}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4396862890191204605 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3658800647530436949, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+  m_PrefabInstance: {fileID: 1135575939945916840}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &4396862890438466968 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3658800647821227056, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
@@ -280,12 +313,43 @@ PrefabInstance:
       value: Adept Slot
       objectReference: {fileID: 0}
     - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 4396862889976973910}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: ammoInfo
+      value: 
+      objectReference: {fileID: 4396862890507735436}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: panelPlayerLoadout
+      value: 
+      objectReference: {fileID: 1135575939895036081}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: correspondLoadoutWeaponType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
       propertyPath: _correspondLoadoutWeaponType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: <HierarchicalPos>k__BackingField
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+--- !u!114 &4396862889976973910 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3658800647025066639, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+  m_PrefabInstance: {fileID: 1135575940396140761}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &4396862890251959529 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3658800647821227056, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
@@ -300,6 +364,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fd754ddcdf29c746b39ed9adb4ca927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4396862890507735436 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3658800647530436949, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+  m_PrefabInstance: {fileID: 1135575940396140761}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1135575941471944175
@@ -399,6 +474,22 @@ PrefabInstance:
       value: Secondary Slot
       objectReference: {fileID: 0}
     - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 4396862891048583008}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: ammoInfo
+      value: 
+      objectReference: {fileID: 4396862889436079290}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: panelPlayerLoadout
+      value: 
+      objectReference: {fileID: 1135575939895036081}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+      propertyPath: correspondLoadoutWeaponType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3658800647821227061, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
       propertyPath: _correspondLoadoutWeaponType
       value: 1
       objectReference: {fileID: 0}
@@ -425,3 +516,25 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3658800647821227056, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
   m_PrefabInstance: {fileID: 1135575941471944175}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4396862889436079290 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3658800647530436949, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+  m_PrefabInstance: {fileID: 1135575941471944175}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4396862891048583008 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3658800647025066639, guid: 7d64430278f84d8429aff42f569035ec, type: 3}
+  m_PrefabInstance: {fileID: 1135575941471944175}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BuffSystem.Common;
+using Characters.Enemies.SerializableData;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -27,6 +28,8 @@ public class DatabaseUtil
     private Dictionary<int, ItemDataEquipmentWeapon> _itemEquipmentWeaponDB;
 
     private Dictionary<EBuffName, string> _buffIconPathDB;
+
+    private Dictionary<int, EnemyData> _enemyDB;
 
     private DatabaseUtil()
     {
@@ -80,6 +83,16 @@ public class DatabaseUtil
         throw new Exception($"Retrieving buff icon failed due to buff name does not exist. Buff Name: {buffName}");
     }
 
+    public EnemyData GetEnemyData(int id)
+    {
+        if (_enemyDB.TryGetValue(id, out EnemyData enemyData))
+        {
+            return enemyData;
+        }
+
+        throw new Exception($"Retrieving data failed due to enemy id does not exist. ID: {id}");
+    }
+
     public static bool IsValidWeaponID(int id)
     {
         if (id > 100000 && id < 1000000)
@@ -91,11 +104,22 @@ public class DatabaseUtil
                                     $"ID: {id}");
     }
     
+    public static bool IsValidEnemyID(int id)
+    {
+        if (id > 10000 && id < 100000)
+        {
+            return true;
+        }
+
+        throw new ArgumentException("Invalid Enemy ID.\n" +
+                                    $"ID: {id}");
+    }
+    
     private void InitDBDict()
     {
         string jsonItemConsumableSupply =
             File.ReadAllText(
-                @"C:\Users\11447\Desktop\GameDev_CS\Unity Project\TBASS\Assets\JsonData\Item\itemDataConfig_consumable_supply.json");
+                @"C:\Users\11447\Desktop\GameDev_CS\Unity Project\TBASS\Assets\JsonData\Item\ItemDataConfig_Consumable_Supply.json");
         List<ItemDataConsumableSupply> deserializedJsonItemConsumableSupply =
             JsonConvert.DeserializeObject<List<ItemDataConsumableSupply>>(jsonItemConsumableSupply);
         _itemConsumableSupplyDB = new Dictionary<int, ItemDataConsumableSupply>();
@@ -106,7 +130,7 @@ public class DatabaseUtil
 
         string jsonItemEquipmentWeapon =
             File.ReadAllText(
-                @"C:\Users\11447\Desktop\GameDev_CS\Unity Project\TBASS\Assets\JsonData\Item\itemDataConfig_equipment_weapon.json");
+                @"C:\Users\11447\Desktop\GameDev_CS\Unity Project\TBASS\Assets\JsonData\Item\ItemDataConfig_Equipment_Weapon.json");
         List<ItemDataEquipmentWeapon> deserializedJsonItemEquipmentWeapon =
             JsonConvert.DeserializeObject<List<ItemDataEquipmentWeapon>>(jsonItemEquipmentWeapon);
         _itemEquipmentWeaponDB = new Dictionary<int, ItemDataEquipmentWeapon>();
@@ -115,19 +139,32 @@ public class DatabaseUtil
             _itemEquipmentWeaponDB.Add(data.ID, data);
         }
 
-        string jsonBuffIconPath =
+        string jsonBuffIcon =
             File.ReadAllText(
-                @"C:\Users\11447\Desktop\GameDev_CS\Unity Project\TBASS\Assets\JsonData\Buff\buffIconPathConfig.json");
+                @"C:\Users\11447\Desktop\GameDev_CS\Unity Project\TBASS\Assets\JsonData\Buff\BuffIconPathConfig.json");
         List<DeserializedJsonBuff> deserializedJsonBuffs =
-            JsonConvert.DeserializeObject<List<DeserializedJsonBuff>>(jsonBuffIconPath);
+            JsonConvert.DeserializeObject<List<DeserializedJsonBuff>>(jsonBuffIcon);
         _buffIconPathDB = new Dictionary<EBuffName, string>();
 
         foreach (var data in deserializedJsonBuffs)
         {
             _buffIconPathDB.Add(data.Name, data.SpritePath);
         }
-    }
+        
+        string jsonEnemyData = 
+            File.ReadAllText(
+                    @"C:\Users\11447\Desktop\GameDev_CS\Unity Project\TBASS\Assets\JsonData\Enemy\EnemyDataConfig.json");
+        List<EnemyData> deserializedEnemyData = JsonConvert.DeserializeObject<List<EnemyData>>(jsonEnemyData);
+        _enemyDB = new Dictionary<int, EnemyData>();
 
+        foreach (var data in deserializedEnemyData)
+        {
+            _enemyDB.Add(data.ID, data);
+        }
+    }
+    
+    
+    //TODO: put this to the buff directory
     /// <summary>
     /// A helper class for converting json data of buff to a dictionary
     /// </summary>

@@ -24,6 +24,8 @@ namespace WeaponSystem
         private ChargeModule _chargeModule;
         
         private Weapon _weapon;
+        
+        
         #region Shooting Module
         
         public event Action BeforeCheckShootCondition
@@ -82,7 +84,7 @@ namespace WeaponSystem
             }
         }
 
-        public event Action ActionAfterShoot
+        public event Action AfterShoot
         {
             add
             {
@@ -98,17 +100,29 @@ namespace WeaponSystem
         
         #endregion
         
+        
         #region Ammunition Module
         
-        public event Action ActionBeforeReload
+        public event Action BeforeReload
         {
             add
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.ActionBeforeReload += value;
+                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.BeforeReload += value;
             }
             remove
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.ActionBeforeReload -= value;
+                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.BeforeReload -= value;
+            }
+        }
+        public event Action OnReload
+        {
+            add
+            {
+                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.OnReload += value;
+            }
+            remove
+            {
+                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.OnReload -= value;
             }
         }
         
@@ -123,9 +137,7 @@ namespace WeaponSystem
                 if (!AmmunitionModuleNullityCheck()) _ammunitionModule.OnHitEnemy -= value;
             }
         }
-
         public bool HaveAmmoInMag => !AmmunitionModuleNullityCheck() && _ammunitionModule.HaveAmmoInMag;
-
         public bool IsReloading => !AmmunitionModuleNullityCheck() && _ammunitionModule.IsReloading;
 
         public Bullet[] GetBullet(int amount)
@@ -134,6 +146,7 @@ namespace WeaponSystem
         }
 
         #endregion
+        
         
         public ModuleDependencyHandler(Weapon weapon,AmmunitionModule ammunitionModule,ShootingModule shootingModule,ChargeModule chargeModule,AimingModule aimingModule)
         {

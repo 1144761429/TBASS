@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using WeaponSystem;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 namespace UISystem
 {
@@ -17,95 +15,80 @@ namespace UISystem
 
     public class PanelPlayerLoadoutSlot : PanelBase
     {
-        private Loadout _loadout;
-        private RectTransform _rectTransform;
         [field: SerializeField] public EPlayerLoadoutSlotHierarchicalPos HierarchicalPos { get; private set; }
-
-        [SerializeField] private ELoadoutWeaponType _correspondLoadoutWeaponType;
-        [SerializeField] private Weapon _weapon;
+        
+        private RectTransform _rectTransform;
+        
+        //[SerializeField] private ELoadoutWeaponType correspondLoadoutWeaponType;
+        
+        private Weapon _weapon;
         private ItemDataEquipmentWeapon _weaponData;
         private RuntimeItemDataEquipmentWeapon _runtimeWeaponData;
-        private AmmunitionModule _ammunitionModule;
 
-        [SerializeField] private Image _weaponIcon;
-        [SerializeField] private TMP_Text _ammoInfo;
+        [SerializeField] private Image icon;
+        [SerializeField] private TMP_Text ammoInfo;
 
         private readonly Vector2 SIZE_TOP = new Vector2(150, 70);
         private readonly Vector2 SIZE_MID = new Vector2(120, 56);
         private readonly Vector2 SIZE_BOT = new Vector2(96, 44);
         
+        private void Awake()
+        {
+            _rectTransform = GetComponent<RectTransform>();
+        }
 
         public override void Init()
         {
+            Debug.Log("Panel Player Loadout Slot Init called");
             base.Init();
-            _loadout = GetComponentInParent<PanelPlayerLoadout>().PlayerLoadout;
-            _rectTransform = GetComponent<RectTransform>();
-
-            switch (_correspondLoadoutWeaponType)
-            {
-                case ELoadoutWeaponType.Primary:
-                    _runtimeWeaponData = _loadout.PrimaryWeapon.RuntimeData;
-                    break;
-                case ELoadoutWeaponType.Secondary:
-                    _runtimeWeaponData = _loadout.SecondaryWeapon.RuntimeData;
-                    break;
-                case ELoadoutWeaponType.Adept:
-                    _runtimeWeaponData = _loadout.AdeptWeapon.RuntimeData;
-                    break;
-            }
-
-            _runtimeWeaponData.OnReduceAmmo += UpdateAmmoInfo;
-
-            if (_weapon.Modules.TryGetValue(EWeaponModule.AmmunitionModule, out var module))
-            {
-                _ammunitionModule = (AmmunitionModule)module;
-                _ammunitionModule.ActionOnReload += UpdateAmmoInfo;
-            }
-            else
-            {
-                Debug.LogWarning($"The weapon in loadout slot {gameObject.name} has no AmmunitionModule");
-            }
-            
-            UpdateWeaponData();
-            UpdateWeaponIcon();
-            UpdateAmmoInfo();
         }
 
-        public void SetWeapon(Weapon weapon)
+        /// <summary>
+        /// Update the weapon and the data of this slot is linked to.
+        /// </summary>
+        /// <param name="weapon"></param>
+        public void UpdateWeaponData(Weapon weapon)
         {
             _weapon = weapon;
+            _weaponData = _weapon.StaticData;
+            _runtimeWeaponData = _weapon.RuntimeData;
+            
+            // Assign the event here because in the weapon system, each weapon is an independent Weapon class,
+            // meaning whenever we change the weapon, all the event of the old weapon will not be applied to the new weapon.
+            // Therefore, it is necessary to assign the event again.
+            _weapon.RuntimeData.OnReduceAmmo += UpdateAmmoInfo;
+            _weapon.DependencyHandler.OnReload += UpdateAmmoInfo;
         }
 
+        /// <summary>
+        /// Update the weapon icon on the left of the ammo info in the slot.
+        /// </summary>
+        public void UpdateWeaponIcon()
+        {
+            icon.sprite = Resources.Load<Sprite>(_weaponData.SpritePath);
+        }
+        
+        /// <summary>
+        /// Update the displayed ammo info, the "ammo in mag | ammo in reserve", in the loadout slot.
+        /// </summary>
+        public void UpdateAmmoInfo()
+        {
+            ammoInfo.text = $"{_runtimeWeaponData.AmmoInMag} I {_runtimeWeaponData.AmmoInReserve}";
+        }
+        
+        /// <summary>
+        /// Set the hierarchical position of this slot in the loadout.
+        /// </summary>
+        /// <param name="pos">The target position of this slot in the loadout.</param>
         public void SetHierarchicalPos(EPlayerLoadoutSlotHierarchicalPos pos)
         {
             HierarchicalPos = pos;
-            UpdateSlotVisual();
-        }
-        public void UpdateWeaponData()
-        {
-            _weaponData = _weapon.StaticData;
-            _runtimeWeaponData = _weapon.RuntimeData;
-        }
-
-        public void UpdateWeaponIcon()
-        {
-            print(_weaponData.Name);
-            _weaponIcon.sprite = Resources.Load<Sprite>(_weaponData.SpritePath);
+            ChangeRectTransformSize();
         }
         
-        private void UpdateSlotVisual()
+        private void ChangeRectTransformSize()
         {
-            ChangeSize(HierarchicalPos);
-        }
-        
-        private void UpdateAmmoInfo()
-        {
-            _ammoInfo.text = $"{_runtimeWeaponData.AmmoInMag} I {_runtimeWeaponData.AmmoInReserve}";
-        }
-
-        private void ChangeSize(EPlayerLoadoutSlotHierarchicalPos pos)
-        {
-            switch (pos)
+            switch (HierarchicalPos)
             {
                 case EPlayerLoadoutSlotHierarchicalPos.Top:
                     _rectTransform.sizeDelta = SIZE_TOP;

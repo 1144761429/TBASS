@@ -1,43 +1,40 @@
-using UnityEngine;
 using FSM;
+using UnityEngine;
 
-public class EnemyIdleState : StateBase<EEnemyPatrolState>
+namespace Characters.Enemies.States
 {
-    private EnemyDataSO _data;
-    private Animator _animator;
-    private Rigidbody2D _rb;
-    private float _timer;
-
-    public EnemyIdleState(EnemyDataSO data, Animator animator, Rigidbody2D rb) : base(false, false)
+    public class EnemyIdleState : StateBase<EEnemyPatrolState>
     {
-        _data = data;
-        _animator = animator;
-        _rb = rb;
-    }
+        private Enemy _enemy;
+        private EnemyStats _stats;
+        private Animator _animator;
+        private Rigidbody2D _rb;
+        private float _timer;
 
-    public override void OnEnter()
-    {
-        base.OnEnter();
-        _timer = 0;
-        _rb.velocity = Vector2.zero;
-    }
+        public EnemyIdleState(Enemy enemy, Animator animator, Rigidbody2D rb) : base(false, false)
+        {
+            _enemy = enemy;
+            _stats = enemy.Stats;
+            _animator = animator;
+            _rb = rb;
+        }
 
-    public override void OnLogic()
-    {
-        base.OnLogic();
-        _timer += Time.deltaTime;
-    }
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            _timer = 0;
+            _rb.velocity = Vector2.zero;
+        }
 
-    public bool IdleTimeEnd()
-    {
-        return _timer >= _data.PatrolIdleTime;
+        public override void OnLogic()
+        {
+            base.OnLogic();
+            _timer += Time.deltaTime;
+        }
+
+        public bool IdleTimeEnd()
+        {
+            return _timer >= _stats.StaticData.PatrolIdleTime;
+        }
     }
-    // public override void CheckForTransition()
-    // {
-    //     base.CheckForTransition();
-    //     if (_timer > (_startTime + _data.PatrolIdleTime))
-    //     {
-    //         _stateMachine.ChangeState(_enemy.States.Walk);
-    //     }
-    // }
 }

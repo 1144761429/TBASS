@@ -54,7 +54,7 @@ namespace WeaponSystem
                 }
             };
             _dependencyHandler.ShootCondition += () => ChargeProgress >= ChargeThreshold;
-            _dependencyHandler.ActionAfterShoot += Reset;
+            _dependencyHandler.AfterShoot += Reset;
             
             _weapon.Events.MainFuncCancelCondition += () => WeaponInputHandler.Instance.MainFunctionKeyReleased;
             _weapon.Events.MainFuncCancelCallback += OnChargeCancel;

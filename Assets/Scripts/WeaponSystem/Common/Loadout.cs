@@ -17,7 +17,7 @@ namespace WeaponSystem
         public GameObject graphicRep;
         
         public event Action<ELoadoutWeaponType> OnSwitchWeapon;
-        public event Action<Weapon,Weapon> OnChangeWeapon;
+        public event Action<ELoadoutWeaponType, Weapon, Weapon> OnChangeWeapon;
         public event Action OnInitializeWeapon;
         
         public Weapon CurrentWeapon;
@@ -27,10 +27,12 @@ namespace WeaponSystem
         [field: SerializeField] public int PrimaryWeaponID { get; private set; }
         [field: SerializeField] public int SecondaryWeaponID { get; private set; }
         [field: SerializeField] public int AdeptWeaponID { get; private set; }
+        
         [field:Space(50)]
         [field: SerializeField] public GameObject PrimaryWeaponContainer { get; private set; }
         [field: SerializeField] public GameObject SecondaryWeaponContainer { get; private set; }
         [field: SerializeField] public GameObject AdeptWeaponContainer { get; private set; }
+        
         [field:Space(50)]
         [field: SerializeField] public Weapon PrimaryWeapon { get; private set; }
         [field: SerializeField] public Weapon SecondaryWeapon { get; private set; }
@@ -48,10 +50,10 @@ namespace WeaponSystem
 
         private void Awake()
         {
-            OnSwitchWeapon += (_) =>
-            {
-                Debug.Log("SwitchWeaponInvoke");
-            };
+            // OnSwitchWeapon += (_) =>
+            // {
+            //     Debug.Log("SwitchWeaponInvoke");
+            // };
             // OnChangeWeapon += (prevW, newW) =>
             // {
             //     Debug.Log(prevW.StaticData.Name + "   " + newW.StaticData.Name);
@@ -63,19 +65,19 @@ namespace WeaponSystem
             if (PrimaryWeaponID != 0)
             {
                 ChangeWeapon(ELoadoutWeaponType.Primary, PrimaryWeaponID);
-                Debug.Log("Primary Weapon Initialized");
+                //Debug.Log("Primary Weapon Initialized");
             }
 
             if (SecondaryWeaponID != 0)
             {
                 ChangeWeapon(ELoadoutWeaponType.Secondary, SecondaryWeaponID);
-                Debug.Log("Secondary Weapon Initialized");
+                //Debug.Log("Secondary Weapon Initialized");
             }
             
             if (AdeptWeaponID != 0)
             {
                 ChangeWeapon(ELoadoutWeaponType.Adept, AdeptWeaponID);
-                Debug.Log("Adept Weapon Initialized");
+                //Debug.Log("Adept Weapon Initialized");
             }
             
             SwitchWeaponTo(ELoadoutWeaponType.Primary);
@@ -168,6 +170,7 @@ namespace WeaponSystem
                     
                     // Load the required data and events for the weapon.
                     PrimaryWeapon.StaticData = staticData;
+                    Debug.Log("Data inited");
                     PrimaryWeapon.RuntimeData = runtimeData;
                     PrimaryWeapon.Init();
                     PrimaryWeaponEvents = PrimaryWeapon.Events;
@@ -252,8 +255,8 @@ namespace WeaponSystem
                     newWeapon = SecondaryWeapon;
                     break;
             }
-            
-            OnChangeWeapon?.Invoke(weaponToBeChanged,newWeapon);
+
+            OnChangeWeapon?.Invoke(loadoutWeaponType, weaponToBeChanged, newWeapon);
         }
         
         /// <summary>
@@ -328,7 +331,7 @@ namespace WeaponSystem
             }
 
             CurrentWeapon.Setup();
-            Debug.Log(OnSwitchWeapon.GetInvocationList().Length);
+            //Debug.Log(OnSwitchWeapon.GetInvocationList().Length);
             OnSwitchWeapon?.Invoke(target);
         }
         

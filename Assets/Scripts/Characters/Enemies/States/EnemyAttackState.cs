@@ -1,27 +1,32 @@
-using UnityEngine;
 using FSM;
+using UnityEngine;
 
-public class EnemyAttackState : StateBase<EEnemyCombatState>
+namespace Characters.Enemies.States
 {
-    private EnemyDataSO _data;
-    private Animator _animator;
-
-
-    public EnemyAttackState(EnemyDataSO data, Animator animator) : base(false, false)
+    public class EnemyAttackState : StateBase<EEnemyCombatState>
     {
-        _data = data;
-        _animator = animator;
-    }
+        private Enemy _enemy;
+        private EnemyStats _stats;
+        private Animator _animator;
 
-    public override void OnEnter()
-    {
-        base.OnEnter();
-        // to be implemented
-    }
 
-    public override void OnExit()
-    {
-        base.OnExit();
-        // to be implemented
+        public EnemyAttackState(Enemy enemy, Animator animator) : base(false, false)
+        {
+            _enemy = enemy;
+            _stats = enemy.Stats;
+            _animator = animator;
+        }
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            // to be implemented
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            // to be implemented
+        }
     }
 }

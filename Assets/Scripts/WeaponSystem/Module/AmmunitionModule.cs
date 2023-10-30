@@ -21,8 +21,8 @@ namespace WeaponSystem
 
         public event Func<bool> ReloadTrigger;
         public event Func<bool> CanReloadConditions;
-        public event Action ActionBeforeReload;
-        public event Action ActionOnReload;
+        public event Action BeforeReload;
+        public event Action OnReload;
         public event Action ActionAfterReload;
         /// <summary>
         /// Event for what a bullet should do after getting it from the bullet object pool.
@@ -188,9 +188,9 @@ namespace WeaponSystem
             // If all reload conditions are met, then start the reload procedure.
             if (FuncBoolUtil.Evaluate(CanReloadConditions))
             {
-                ActionBeforeReload?.Invoke();
+                BeforeReload?.Invoke();
                 yield return Reload();
-                ActionOnReload?.Invoke();
+                OnReload?.Invoke();
                 IsReloading = false;
                 ActionAfterReload?.Invoke();
             }

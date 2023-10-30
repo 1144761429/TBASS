@@ -1,5 +1,5 @@
+using Characters.Enemies.SerializableData;
 using StackableElement;
-using UnityEngine;
 
 public enum EEnemySpeedElementType
 {
@@ -7,30 +7,41 @@ public enum EEnemySpeedElementType
     Chase
 }
 
-public class EnemySpeedHandler : MonoBehaviour
+namespace Characters.Enemies
 {
-    public float Speed
+    public class EnemySpeedHandler
     {
-        get => _speedHandler.CalculateValue();
-    }
+        private Enemy _entity;
 
-    private SpeedHandler<EEnemySpeedElementType> _speedHandler;
-    [SerializeField] private EnemyDataSO _data;
+        public float Speed
+        {
+            get => _speedHandler.CalculateValue();
+        }
 
-    private void Awake()
-    {
-        _speedHandler = new SpeedHandler<EEnemySpeedElementType>();
+        private SpeedHandler<EEnemySpeedElementType> _speedHandler;
+        private EnemyData _data;
 
-        _speedHandler.Add(EEnemySpeedElementType.Patrol,
-            new StackableElement<float>(_data.PatrolSpeed, new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
+        public EnemySpeedHandler(Enemy entity, EnemyData data)
+        {
+            _entity = entity;
+            _speedHandler = new SpeedHandler<EEnemySpeedElementType>();
+            
+            _speedHandler.Add(EEnemySpeedElementType.Patrol,
+                new StackableElement<float>(data.PatrolSpeed, new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
+                    new BoolWrapper(true)));
+            _speedHandler.Add(EEnemySpeedElementType.Chase, new StackableElement<float>(data.ChaseSpeed,
+                new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
                 new BoolWrapper(true)));
-        _speedHandler.Add(EEnemySpeedElementType.Chase, new StackableElement<float>(_data.PatrolSpeed,
-            new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
-            new BoolWrapper(true)));
-    }
+        }
 
-    public StackableElement<float> GetSpeedElement(EEnemySpeedElementType type)
-    {
-        return _speedHandler.Get(type);
+        public StackableElement<float> GetSpeedElement(EEnemySpeedElementType type)
+        {
+            return _speedHandler.Get(type);
+        }
+
+        public void Debug()
+        {
+            _speedHandler.DebugContainedStackableElement();
+        }
     }
 }

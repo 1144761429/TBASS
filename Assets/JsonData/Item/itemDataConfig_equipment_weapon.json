@@ -31,6 +31,7 @@
       0
     ],
     "HasAimModule": "FALSE",
+    "AimIndicatorType": "None",
     "DefaultAimAngle": 0,
     "MinAimAngle": 0,
     "AimSpeed": 0,
@@ -69,6 +70,7 @@
       0
     ],
     "HasAimModule": "FALSE",
+    "AimIndicatorType": "None",
     "DefaultAimAngle": 0,
     "MinAimAngle": 0,
     "AimSpeed": 0,
@@ -111,6 +113,7 @@
       20
     ],
     "HasAimModule": "TRUE",
+    "AimIndicatorType": "Cone",
     "DefaultAimAngle": 60,
     "MinAimAngle": 15,
     "AimSpeed": 10,
@@ -149,6 +152,7 @@
       0
     ],
     "HasAimModule": "FALSE",
+    "AimIndicatorType": "None",
     "DefaultAimAngle": 0,
     "MinAimAngle": 0,
     "AimSpeed": 0,

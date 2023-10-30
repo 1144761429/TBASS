@@ -3,6 +3,13 @@ using UnityEngine;
 
 namespace WeaponSystem
 {
+    public enum EAimIndicatorType
+    {
+        None,
+        Cone,
+        Sniper
+    }
+    
     public class AimingModule : WeaponModule
     {
         public override EWeaponModule ModuleType => EWeaponModule.AimingModule;
@@ -19,17 +26,13 @@ namespace WeaponSystem
         
         #endregion
         
-        private Transform _bulletSpawn => _weapon.BulletSpawnPos;
-        private ConeAimIndicator _coneAimIndicator;
+        private ConeAimIndicator _aimIndicator;
 
         public AimingModule(Weapon weapon, ItemDataEquipmentWeapon staticData,
             RuntimeItemDataEquipmentWeapon runtimeData) : base(weapon,
             weapon, staticData, runtimeData)
         {
-            _coneAimIndicator = GameObject
-                .Instantiate(Resources.Load<GameObject>("Prefabs/Aim Laser"), _bulletSpawn, false)
-                .GetComponent<ConeAimIndicator>();
-            
+            InitAimIndicator(staticData.AimIndicatorType);
             HideAimVisual();
             
             AimTrigger += () => WeaponInputHandler.Instance.AltFunctionKeyHeld;
@@ -45,9 +48,9 @@ namespace WeaponSystem
             _weapon.Events.AltFuncCancelCondition += AimCancelCondition;
             _weapon.Events.AltFuncCancelCallback += ActionOnCancelingAim;
             
-            _dependencyHandler.ActionBeforeReload += HideAimVisual;
-            _dependencyHandler.ActionBeforeReload += ResetAimAngle;
-            _dependencyHandler.ActionAfterShoot += ResetAimAngle;
+            _dependencyHandler.BeforeReload += HideAimVisual;
+            _dependencyHandler.BeforeReload += ResetAimAngle;
+            _dependencyHandler.AfterShoot += ResetAimAngle;
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace WeaponSystem
         /// </summary>
         private void DisplayAimVisual()
         {
-            _coneAimIndicator.gameObject.SetActive(true);
+            _aimIndicator.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace WeaponSystem
         /// </summary>
         private void HideAimVisual()
         {
-            _coneAimIndicator.gameObject.SetActive(false);
+            _aimIndicator.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -95,7 +98,12 @@ namespace WeaponSystem
         {
             _runtimeData.AimAngle -= Time.deltaTime * 10 * _staticData.AimSpeed;
             _runtimeData.AimAngle = Mathf.Clamp(_runtimeData.AimAngle, _staticData.MinAimAngle, _staticData.DefaultAimAngle);
-            _coneAimIndicator.UpdateAimAngle(_runtimeData.AimAngle);
+            _aimIndicator.UpdateAimAngle(_runtimeData.AimAngle);
+        }
+
+        private void InitAimIndicator(EAimIndicatorType type)
+        {
+            
         }
     }
 }

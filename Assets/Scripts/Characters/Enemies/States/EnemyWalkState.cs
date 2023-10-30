@@ -1,50 +1,70 @@
-using UnityEngine;
 using FSM;
+using UnityEngine;
 
-public class EnemyWalkState : StateBase<EEnemyPatrolState>
+namespace Characters.Enemies.States
 {
-    private EnemyDataSO _data;
-    private Animator _animator;
-    private Rigidbody2D _rb;
-    private Transform _enemyTransfrom;
-    private EnemySpeedHandler _speedHandler;
-    private Transform _currentTargetWayPoint;
-
-    public EnemyWalkState(EnemyDataSO data, Animator animator, Rigidbody2D rb, Transform transform, EnemySpeedHandler speedHandler) : base(false, false)
+    public class EnemyWalkState : StateBase<EEnemyPatrolState>
     {
-        _data = data;
-        _animator = animator;
-        _rb = rb;
-        _enemyTransfrom = transform;
-        _speedHandler = speedHandler;
-    }
+        private Enemy _enemy;
+        private EnemyStats _stats;
+        
+        private Animator _animator;
+        private Rigidbody2D _rb;
+        private Transform _enemyTransfrom;
+        
+        private EnemySpeedHandler _speedHandler;
+        private Transform _currentTargetWayPoint;
 
-    public override void OnEnter()
-    {
-        base.OnEnter();
-        _currentTargetWayPoint = _data.PatrolWayPoints[_data.CurrentWayPoint];
-        _speedHandler.GetSpeedElement(EEnemySpeedElementType.Patrol).AddStack(1);
-    }
-
-    public override void OnLogic()
-    {
-        base.OnLogic();
-        _rb.velocity = (_currentTargetWayPoint.position - _enemyTransfrom.position).normalized * _data.PatrolSpeed;
-    }
-
-    public override void OnExit()
-    {
-        base.OnExit();
-        if (ReachedWayPoint())
+        public EnemyWalkState(Enemy enemy) : base(false, false)
         {
-            _data.SetWayPointToNext();
+            _enemy = enemy;
+            
+            _stats = enemy.Stats;
+            _animator = enemy.Animator;
+            _speedHandler = _enemy.Stats.SpeedHandler;
+            _enemyTransfrom = _enemy.transform;
+            _rb = _enemy.RigidBody;
         }
 
-        _speedHandler.GetSpeedElement(EEnemySpeedElementType.Patrol).RemoveStack(1);
-    }
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            
+            _speedHandler.GetSpeedElement(EEnemySpeedElementType.Patrol).AddStack(1);
+            
+            _currentTargetWayPoint = _enemy.PatrolWayPoints[_stats.CurrentWayPointIndex];
+        }
 
-    public bool ReachedWayPoint()
-    {
-        return Vector2.Distance(_enemyTransfrom.position, _currentTargetWayPoint.position) < 0.05f;
+        public override void OnLogic()
+        {
+            base.OnLogic();
+            
+            _rb.velocity = (_currentTargetWayPoint.position - _enemyTransfrom.position).normalized *
+                           _stats.SpeedHandler.Speed;
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            
+            if (ReachedWayPoint())
+            {
+                if (_stats.CurrentWayPointIndex + 1 >= _enemy.PatrolWayPoints.Count)
+                {
+                    _stats.SetCurrentWayPointIndex(0);
+                }
+                else
+                {
+                    _stats.SetCurrentWayPointIndex(_stats.CurrentWayPointIndex + 1);
+                }
+            }
+
+            _speedHandler.GetSpeedElement(EEnemySpeedElementType.Patrol).RemoveStack(1);
+        }
+
+        public bool ReachedWayPoint()
+        {
+            return Vector2.Distance(_enemyTransfrom.position, _currentTargetWayPoint.position) < 0.05f;
+        }
     }
 }

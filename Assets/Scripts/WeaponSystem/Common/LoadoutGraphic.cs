@@ -12,12 +12,12 @@ namespace WeaponSystem
         private void Awake()
         {
             loadout.OnSwitchWeapon += ChangeAnimatorController;
-            loadout.OnChangeWeapon += (prevWeapon,newWeapon) =>
+            loadout.OnChangeWeapon += (loadoutWeaponType, prevWeapon, newWeapon) =>
             {
                 ELoadoutWeaponType currentLoadoutWeaponType = loadout.CurrentLoadoutWeaponType;
-                
+
                 // On changing weapon, only change the animator controller if the weapon to be changed is the one we are currently holding.
-                if (prevWeapon != null && prevWeapon.LoadoutWeaponType == currentLoadoutWeaponType)
+                if (prevWeapon != null && loadoutWeaponType == currentLoadoutWeaponType)
                 {
                     ChangeAnimatorController(currentLoadoutWeaponType);
                 }
@@ -26,7 +26,7 @@ namespace WeaponSystem
 
         private void ChangeAnimatorController(ELoadoutWeaponType loadoutWeaponType)
         {
-            Debug.Log("Change Animator Controller called.");
+            //Debug.Log("Change Animator Controller called.");
             Weapon weapon = null;
             switch (loadoutWeaponType)
             {

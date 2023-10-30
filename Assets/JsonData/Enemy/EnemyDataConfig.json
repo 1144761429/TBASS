@@ -1,0 +1,16 @@
+﻿[
+  {
+    "ID": 10001,
+    "Name": "Rouge Agent",
+    "MaxHP": 100,
+    "MinHP": 0,
+    "IsDiscreteHP": "FALSE",
+    "AttackDamage": 10,
+    "AttackRange": 1,
+    "AlertDistance": 5,
+    "MoveSpeed": 2,
+    "ChaseSpeed": 3,
+    "PatrolSpeed": 2,
+    "PatrolIdleTime": 1
+  }
+]

@@ -75,9 +75,9 @@ namespace WeaponSystem.DamagingEntities
                 //                                 buffHandler.FinalDamageModifier.GetFinalDmgModValue());
 
                 OnHitEnemy?.Invoke(other.gameObject);
-                if (other.gameObject.TryGetComponent(out EnemyStats enemyStats))
+                if (other.gameObject.TryGetComponent(out IDamageable damageable))
                 {
-                    enemyStats.TakeDamage(ParentWeapon.StaticData.Damage);
+                    damageable.TakeDamage(ParentWeapon.StaticData.Damage);
                 }
                 else
                 {

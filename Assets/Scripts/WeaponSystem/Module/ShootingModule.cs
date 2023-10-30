@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using WeaponSystem.DamagingEntities;
 using Object = UnityEngine.Object;
 
@@ -10,8 +9,6 @@ namespace WeaponSystem
 {
     public class ShootingModule : WeaponModule
     {
-        public Vector3 shootV3;
-        
         public override EWeaponModule ModuleType => EWeaponModule.ShootingModule;
 
         #region Module Events
@@ -216,7 +213,6 @@ namespace WeaponSystem
                     
                     currentProjectile.Rb.velocity = finalVelocity.normalized * staticSpeed;
 
-                    shootV3 = finalVelocity.normalized * staticSpeed;
                     // Vector3 tempV3 = new Vector3(_weapon.BulletSpawnPos.transform.position.x,
                     //     _weapon.BulletSpawnPos.transform.position.y, 0);
                     // Debug.DrawLine(tempV3,finalVelocity.normalized*10f);

@@ -1,59 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
-using System.Timers;
-using BuffSystem.Common;
-using BuffSystem.Interface;
-using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
+using Characters.Enemies.SerializableData;
 
-public class EnemyStats : MonoBehaviour, IDamageable, IBuffable
+namespace Characters.Enemies
 {
-    public event Action BeforeTakeDamageCallback;
-    public event Action TakeDamageCallback;
-    public event Action AfterTakeDamageCallback;
-
-    public bool CanTakeBuff => true;
-    public bool IsBleedResist => false;
-    public BuffHandler BuffHandler { get; private set; }
-
-    [SerializeField] private EnemyDataSO sourceData;
-    public EnemyDataSO RuntimeData { get; private set; }
-
-    private Rigidbody2D _rigidBody;
-
-    #region Monobehavior Methods
-
-    private void Awake()
+    /// <summary>
+    /// A class that stores the static data and runtime data of an enemy.
+    /// </summary>
+    public class EnemyStats
     {
-        BuffHandler = new BuffHandler();
-        RuntimeData = Instantiate<EnemyDataSO>(sourceData);
-        RuntimeData.Init();
+        private Enemy _enemy;
 
-        _rigidBody = GetComponent<Rigidbody2D>();
-        _rigidBody.gravityScale = 0;
-    }
+        public EnemyData StaticData { get; private set; }
 
-    #endregion
-
-    public void TakeDamage(float damage)
-    {
-        BeforeTakeDamageCallback?.Invoke();
-
-        float finalHp = Mathf.Max(RuntimeData.CurrentHp - damage, RuntimeData.MinHp);
-        RuntimeData.CurrentHp = finalHp;
-        TakeDamageCallback?.Invoke();
-        AfterTakeDamageCallback?.Invoke();
-
-        if (finalHp <= RuntimeData.MinHp)
+        #region Runtime Data
+        
+        public float CurrentHP { get; private set; }
+        public int CurrentWayPointIndex { get; private set; }
+        public EnemySpeedHandler SpeedHandler { get; private set; }
+        
+        #endregion
+        
+        
+        
+        public EnemyStats(Enemy enemy, int id)
         {
-            Die();
-        }
-    }
+            _enemy = enemy;
+            
+            StaticData = DatabaseUtil.Instance.GetEnemyData(id);
 
-    private void Die()
-    {
-        Destroy(this.gameObject);
+            CurrentHP = StaticData.MaxHP;
+            CurrentWayPointIndex = 0;
+            
+            SpeedHandler = new EnemySpeedHandler(_enemy, StaticData);
+        }
+
+        public void SetCurrentHP(float newCurrentHP)
+        {
+            CurrentHP = newCurrentHP;
+        }
+
+        public void SetCurrentWayPointIndex(int idx)
+        {
+            if (idx >= _enemy.PatrolWayPoints.Count || idx < 0)
+            {
+                throw new ArgumentException(
+                    $"Invalid way point index. Argument: {idx}, Range: 0 to {_enemy.PatrolWayPoints.Count - 1} inclusive.");
+            }
+
+            CurrentWayPointIndex = idx;
+        }
     }
 }
