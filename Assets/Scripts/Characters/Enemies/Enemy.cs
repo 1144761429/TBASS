@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BuffSystem.Common;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Characters.Enemies
 {
@@ -12,23 +13,29 @@ namespace Characters.Enemies
 
         public Animator Animator { get; private set; }
         public Rigidbody2D RigidBody { get; private set; }
-
+        [field : SerializeField] public Collider2D AlertTrigger { get; private set; }
+                
+        public NavMeshAgent Agent { get; private set; }
         [field : SerializeField] public List<Transform> PatrolWayPoints { get; private set; }
         
 
         protected virtual void Awake()
         {
+            Stats = new EnemyStats(this, ID);
+            
             RigidBody = GetComponent<Rigidbody2D>();
             RigidBody.gravityScale = 0;
-
-            Stats = new EnemyStats(this, ID);
-
+            
+            Agent = GetComponent<NavMeshAgent>();
+            Agent.updateRotation = false;
+            Agent.updateUpAxis = false;
+            
             OnHPBelowZero += Die;
         }
 
         protected virtual void Update()
         {
-            Stats.SpeedHandler.Debug();
+            
         }
 
         private void Die()

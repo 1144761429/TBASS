@@ -7,8 +7,6 @@ using WeaponSystem;
 
 public class Test : MonoBehaviour
 {
-    private void Update()
-    {
-        Debug.Log(transform.position);
-    }
+    public AttackBehavior ab;
+    public AttackBehavior[] abs;
 }

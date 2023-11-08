@@ -39,7 +39,7 @@ namespace UISystem
 
         public override void Init()
         {
-            Debug.Log("Panel Player Loadout Slot Init called");
+            //Debug.Log("Panel Player Loadout Slot Init called");
             base.Init();
         }
 

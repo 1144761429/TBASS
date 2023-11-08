@@ -1,4 +1,6 @@
-﻿namespace Characters.Enemies
+﻿using UnityEngine;
+
+namespace Characters.Enemies
 {
     public class PatrolRioter : Enemy
     {
@@ -16,9 +18,10 @@
 
         protected override void Update()
         {
-            base.Update();;
+            base.Update();
             
             _sm.UpdateStateMachine();
+            
         }
     }
 }

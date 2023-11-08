@@ -7,22 +7,24 @@ namespace Characters.Enemies.SerializableData
     {
         public int ID;
         public String Name;
-        
+
         public float MaxHP;
         public float MinHP;
         public bool IsDiscreteHP;
-        
+
         public float AttackDamage;
         public float AttackRange;
 
         public float AlertDistance;
         public float MoveSpeed;
         public float ChaseSpeed;
-        
+
         public float PatrolIdleTime;
         public float PatrolSpeed;
-        
-        
+
+        public float AttackCooldown;
+
+
         public override string ToString()
         {
             return base.ToString()
@@ -37,8 +39,8 @@ namespace Characters.Enemies.SerializableData
                    + $"MoveSpeed: {MoveSpeed}\n"
                    + $"ChaseSpeed: {ChaseSpeed}\n"
                    + $"PatrolIdleTime: {PatrolIdleTime}\n"
-                   + $"PatrolSpeed: {PatrolSpeed}\n";
+                   + $"PatrolSpeed: {PatrolSpeed}\n"
+                   + $"AttackCooldown: {AttackCooldown}\n";
         }
     }
-    
 }

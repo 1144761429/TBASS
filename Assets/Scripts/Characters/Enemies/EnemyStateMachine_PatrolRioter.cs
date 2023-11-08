@@ -32,12 +32,12 @@ namespace Characters.Enemies
         {
             get => _superSM.ActiveStateName.ToString();
         }
-        
+
         private Animator _animator;
         private Rigidbody2D _rb;
         private EnemySpeedHandler _speedHandler;
         private Transform _playerTransform;
-        
+
         private StateMachine<EEnemyState> _superSM;
 
         private StateMachine<EEnemyState, EEnemyPatrolState, string> _patrolSM;
@@ -52,14 +52,14 @@ namespace Characters.Enemies
         {
             _enemy = enemy;
             _stats = enemy.Stats;
-            
+
             _animator = _enemy.Animator;
             _rb = _enemy.RigidBody;
             _playerTransform = PlayerStats.Instance.gameObject.transform;
-            
-            
+
+
             _speedHandler = _enemy.Stats.SpeedHandler;
-            
+
             _patrolSM = new StateMachine<EEnemyState, EEnemyPatrolState, string>(false);
             _idleState = new EnemyIdleState(_enemy, _animator, _rb);
             _walkState = new EnemyWalkState(_enemy);
@@ -78,7 +78,8 @@ namespace Characters.Enemies
             _combatSM.AddState(EEnemyCombatState.Attack, _attackState);
             _combatSM.AddTwoWayTransition(new Transition<EEnemyCombatState>(EEnemyCombatState.Chase,
                 EEnemyCombatState.Attack,
-                transition => _chaseState.PlayerIsInAttackRange()));
+                transition => Vector2.Distance(_enemy.transform.position, _playerTransform.position) <=
+                              _stats.StaticData.AttackRange));
             _combatSM.SetStartState(EEnemyCombatState.Chase);
 
             _superSM = new StateMachine<EEnemyState>(false);

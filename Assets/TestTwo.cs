@@ -6,8 +6,14 @@ using UnityEngine;
 
 public class TestTwo : MonoBehaviour
 {
-    public void PrintMsg()
+    public int IntOne;
+    public List<int> IntList;
+
+    public List<AttackBehavior> AttackBehaviors;
+
+    private void Awake()
     {
-        print("Hi");
+        AttackBehaviors = new List<AttackBehavior>();
+        AttackBehaviors.Add(new AttackBehavior());
     }
 }

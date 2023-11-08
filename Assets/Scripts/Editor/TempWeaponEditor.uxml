@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Label tabindex="-1" text="Attack Behaviors" display-tooltip-when-elided="true" enable-rich-text="true" focusable="false" />
+    <ui:TextField picking-mode="Ignore" label="Note(Label Name)" text="filler text" binding-path="Note" />
+</ui:UXML>

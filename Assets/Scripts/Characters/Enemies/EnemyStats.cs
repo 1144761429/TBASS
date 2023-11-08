@@ -9,18 +9,18 @@ namespace Characters.Enemies
     public class EnemyStats
     {
         private Enemy _enemy;
-
         public EnemyData StaticData { get; private set; }
 
         #region Runtime Data
         
         public float CurrentHP { get; private set; }
         public int CurrentWayPointIndex { get; private set; }
+        public float LastAttackTime { get; private set; }
         public EnemySpeedHandler SpeedHandler { get; private set; }
         
+        
         #endregion
-        
-        
+
         
         public EnemyStats(Enemy enemy, int id)
         {
@@ -30,6 +30,7 @@ namespace Characters.Enemies
 
             CurrentHP = StaticData.MaxHP;
             CurrentWayPointIndex = 0;
+            LastAttackTime = 0;
             
             SpeedHandler = new EnemySpeedHandler(_enemy, StaticData);
         }
@@ -48,6 +49,11 @@ namespace Characters.Enemies
             }
 
             CurrentWayPointIndex = idx;
+        }
+
+        public void SetLastAttackTime(float time)
+        {
+            LastAttackTime = time;
         }
     }
 }

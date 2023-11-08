@@ -20,7 +20,19 @@ namespace Characters.Enemies.States
         public override void OnEnter()
         {
             base.OnEnter();
-            // to be implemented
+            // to be implemented===========
+        }
+
+        public override void OnLogic()
+        {
+            base.OnLogic();
+
+            if (Time.time >= _stats.LastAttackTime + _stats.StaticData.AttackCooldown)
+            {
+                Debug.Log("Attacking");
+                _stats.SetLastAttackTime(Time.time);
+            }
+            
         }
 
         public override void OnExit()

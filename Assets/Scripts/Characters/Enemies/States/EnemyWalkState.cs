@@ -1,5 +1,6 @@
 using FSM;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Characters.Enemies.States
 {
@@ -11,6 +12,7 @@ namespace Characters.Enemies.States
         private Animator _animator;
         private Rigidbody2D _rb;
         private Transform _enemyTransfrom;
+        private NavMeshAgent _agent;
         
         private EnemySpeedHandler _speedHandler;
         private Transform _currentTargetWayPoint;
@@ -21,9 +23,11 @@ namespace Characters.Enemies.States
             
             _stats = enemy.Stats;
             _animator = enemy.Animator;
-            _speedHandler = _enemy.Stats.SpeedHandler;
             _enemyTransfrom = _enemy.transform;
             _rb = _enemy.RigidBody;
+            _agent = enemy.Agent;
+                
+            _speedHandler = _enemy.Stats.SpeedHandler;
         }
 
         public override void OnEnter()
@@ -39,8 +43,12 @@ namespace Characters.Enemies.States
         {
             base.OnLogic();
             
-            _rb.velocity = (_currentTargetWayPoint.position - _enemyTransfrom.position).normalized *
-                           _stats.SpeedHandler.Speed;
+            // _rb.velocity = (_currentTargetWayPoint.position - _enemyTransfrom.position).normalized *
+            //                _stats.SpeedHandler.Speed;
+
+            _agent.stoppingDistance = 0.2f;
+            _agent.speed = _speedHandler.Speed;
+            _agent.destination = _currentTargetWayPoint.position;
         }
 
         public override void OnExit()

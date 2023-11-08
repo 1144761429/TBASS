@@ -11,6 +11,7 @@
     "MoveSpeed": 2,
     "ChaseSpeed": 3,
     "PatrolSpeed": 2,
-    "PatrolIdleTime": 1
+    "PatrolIdleTime": 1,
+    "AttackCooldown": 2
   }
 ]

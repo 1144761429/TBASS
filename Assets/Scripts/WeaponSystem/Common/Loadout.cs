@@ -110,7 +110,6 @@ namespace WeaponSystem
             {
                 graphicRep.transform.localScale = new Vector3(-1, 1, 1);
                 actualProjectileAngle = actualProjectileAngle - 180;
-                //Debug.Log("FIX DIZ SHET");
             }
             
             graphicRep.transform.localRotation = Quaternion.Euler(0, 0, actualProjectileAngle);
@@ -170,7 +169,6 @@ namespace WeaponSystem
                     
                     // Load the required data and events for the weapon.
                     PrimaryWeapon.StaticData = staticData;
-                    Debug.Log("Data inited");
                     PrimaryWeapon.RuntimeData = runtimeData;
                     PrimaryWeapon.Init();
                     PrimaryWeaponEvents = PrimaryWeapon.Events;
