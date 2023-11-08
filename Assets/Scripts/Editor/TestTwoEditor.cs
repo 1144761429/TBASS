@@ -18,7 +18,6 @@ public class TestTwoEditor : Editor
         inspector.Add(visualTree.CloneTree());
         var temp = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("f8f28cfb858bfbd4ea87437beb444a74");
         inspector.Add(temp.CloneTree());
-        inspector.in
         //inspector.Add(temp.CloneTree());
         //inspector.Add(temp);
         
