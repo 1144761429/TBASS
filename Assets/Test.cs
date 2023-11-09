@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Events;
 using WeaponSystem;
@@ -7,6 +8,6 @@ using WeaponSystem;
 
 public class Test : MonoBehaviour
 {
-    public AttackBehavior ab;
-    public AttackBehavior[] abs;
+   
+    
 }

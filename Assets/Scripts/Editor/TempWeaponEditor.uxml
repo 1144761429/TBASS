@@ -1,4 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:Label tabindex="-1" text="Attack Behaviors" display-tooltip-when-elided="true" enable-rich-text="true" focusable="false" />
-    <ui:TextField picking-mode="Ignore" label="Note(Label Name)" text="filler text" binding-path="Note" />
+    <ui:ListView focusable="true" virtualization-method="DynamicHeight" show-border="true" reorderable="false" reorder-mode="Animated" show-foldout-header="true" binding-path="abs" />
+    <uie:Toolbar>
+        <uie:ToolbarButton text="Add" parse-escape-sequences="true" display-tooltip-when-elided="true" binding-path="addButton" />
+    </uie:Toolbar>
 </ui:UXML>

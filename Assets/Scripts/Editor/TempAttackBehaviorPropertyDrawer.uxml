@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:Label tabindex="-1" text="Attack Behavior" display-tooltip-when-elided="true" />
-    <ui:Foldout text="Foldout" value="true" style="opacity: 1; display: flex; visibility: visible; overflow: visible; left: auto;">
-        <ui:EnumField label="Attack Behavior Type" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" binding-path="AttackBehaviorType" focusable="true" include-obsolete-values="false" />
-    </ui:Foldout>
-</ui:UXML>
