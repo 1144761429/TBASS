@@ -17,8 +17,6 @@ public class PlayerMovement : MonoBehaviour
     #region Monobehavior Methods    
     private void Awake()
     {
-        InputHandler = GetComponent<PlayerInputHandler>();
-
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = 0;
         _speedHandler = GetComponent<PlayerSpeedHandler>();
@@ -30,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     {
         FlipPlayer();
         ChangePlayerForward();
-        Move(InputHandler.MovementInput);
+        Move(PlayerInputHandler.MovementInput);
     }
     #endregion
 
@@ -58,14 +56,14 @@ public class PlayerMovement : MonoBehaviour
     private void SlidingOnEdge(Vector2 direction)
     {
         Vector2 collisionNormal = _raycastHits[0].normal;
-        float angleFromNormalToInput = Vector2.SignedAngle(collisionNormal, new Vector2(-InputHandler.MovementInput.x, -InputHandler.MovementInput.y));
+        float angleFromNormalToInput = Vector2.SignedAngle(collisionNormal, new Vector2(-PlayerInputHandler.MovementInput.x, -PlayerInputHandler.MovementInput.y));
         if (angleFromNormalToInput < 0)
         {
-            direction = RotateVector2(InputHandler.MovementInput, -90 - angleFromNormalToInput);
+            direction = RotateVector2(PlayerInputHandler.MovementInput, -90 - angleFromNormalToInput);
         }
         else
         {
-            direction = RotateVector2(InputHandler.MovementInput, 90 - angleFromNormalToInput);
+            direction = RotateVector2(PlayerInputHandler.MovementInput, 90 - angleFromNormalToInput);
         }
         Debug.DrawRay(MovementCollider.bounds.center, MovementCollider.bounds.center + new Vector3(direction.x, direction.y) * 100, Color.blue, .1f);
         float newMoveSpeed = _speedHandler.Speed * Mathf.Cos((90 - Mathf.Abs(angleFromNormalToInput)) * Mathf.Deg2Rad);

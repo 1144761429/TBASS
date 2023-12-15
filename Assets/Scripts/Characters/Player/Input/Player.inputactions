@@ -22,6 +22,69 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "AbilityQ",
+                    "type": "Button",
+                    "id": "5f0c64e1-e45f-4089-b84c-2f5b257dddd6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WeaponMainFunc",
+                    "type": "Button",
+                    "id": "0dc561b7-bda1-4ad8-8663-eed02942a955",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WeaponAltFunc",
+                    "type": "Button",
+                    "id": "43a90596-3a03-4870-ab14-36d56f6e189c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WeaponReload",
+                    "type": "Button",
+                    "id": "bf39dbe9-e193-42d7-a271-2de51fef05f5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToPrimaryWeapon",
+                    "type": "Button",
+                    "id": "e9a8dc7c-23cd-4724-b018-7f4a6da5e8ff",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToSecondaryWeapon",
+                    "type": "Button",
+                    "id": "7b03297a-9b29-4ef6-a0ef-4435f72ea28c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToAdeptWeapon",
+                    "type": "Button",
+                    "id": "41f2e246-1f19-4fbb-8788-6668687495f5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -88,6 +151,83 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aa89a0a3-e046-40ec-bc23-9c21c4083aa1",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AbilityQ",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e7244ac7-18d5-4235-b49d-fcd8b8eecae8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WeaponMainFunc",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "44ca1585-1788-4dd2-bb9f-fbd433ac9281",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WeaponAltFunc",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9edc7142-300e-42a2-a924-9ce94b675643",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WeaponReload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5c128581-f0d3-45d2-be10-391625f664b0",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchToPrimaryWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e07bcaf5-20d2-4df1-9843-67459d6c17a1",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchToSecondaryWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7d813591-bd6c-48f4-ba29-ada3f30d67b4",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchToAdeptWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

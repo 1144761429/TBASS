@@ -55,8 +55,8 @@ namespace WeaponSystem
             };
             _dependencyHandler.ShootCondition += () => ChargeProgress >= ChargeThreshold;
             _dependencyHandler.AfterShoot += Reset;
-            
-            _weapon.Events.MainFuncCancelCondition += () => WeaponInputHandler.Instance.MainFunctionKeyReleased;
+
+            _weapon.Events.MainFuncCancelCondition += () => PlayerInputHandler.IsWeaponMainFuncCanceled;
             _weapon.Events.MainFuncCancelCallback += OnChargeCancel;
         }
         
@@ -65,12 +65,12 @@ namespace WeaponSystem
         {
             if (_weapon.Loadout.CurrentWeapon.StaticData.HasChargeModule)
             {
-                if (WeaponInputHandler.Instance.MainFunctionKeyPressed)
+                if (PlayerInputHandler.IsWeaponMainFuncPressedThisFrame)
                 {
                     OnChargeStart?.Invoke();
                 }
 
-                if (WeaponInputHandler.Instance.MainFunctionKeyHeld)
+                if (PlayerInputHandler.IsWeaponMainFuncPressed)
                 {
                     ChargeProgress += ChargeSpeed * Time.deltaTime;
                     OnCharging?.Invoke();

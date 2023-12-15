@@ -57,10 +57,16 @@ namespace WeaponSystem
             switch (_staticData.FireMode)
             {
                 case EFireMode.Single:
-                    ShootTrigger = () => WeaponInputHandler.Instance.MainFunctionKeyPressed;
+                    ShootTrigger = () =>
+                    {
+                        return PlayerInputHandler.IsWeaponMainFuncPressedThisFrame;
+                    };
                     break;
                 case EFireMode.Auto:
-                    ShootTrigger = () => WeaponInputHandler.Instance.MainFunctionKeyHeld;
+                    ShootTrigger = () =>
+                    {
+                        return PlayerInputHandler.IsWeaponMainFuncPressed;
+                    };
                     break;
             }
 

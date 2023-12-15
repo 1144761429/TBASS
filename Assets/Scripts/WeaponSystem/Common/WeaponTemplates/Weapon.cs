@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using WeaponSystem.Modification;
 
 namespace WeaponSystem

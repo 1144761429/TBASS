@@ -106,7 +106,7 @@ namespace WeaponSystem
             _bulletObjPool = new ObjectPool<Bullet>(CreateBullet, OnGetBullet, OnReleaseBullet, OnDestroyBullet, true,
                 30, 50);
             
-            ReloadTrigger += () => WeaponInputHandler.Instance.ReloadKeyPressed;
+            ReloadTrigger += () => PlayerInputHandler.IsWeaponReloadPressedThisFrame;
             CanReloadConditions += () => CanReload;
             CanReloadConditions += () => IsMagNotFull;
             CanReloadConditions += () => HaveAmmoInReserve;

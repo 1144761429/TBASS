@@ -1,13 +1,26 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.UIElements;
+using AbilitySystem;
 using UnityEngine;
-using UnityEngine.Events;
-using WeaponSystem;
+using UnityEngine.InputSystem;
+using UnityTimer;
 
 
-public class Test : MonoBehaviour
+public class Test : MonoBehaviour, IDamageable
 {
-   
-    
+    public event Action BeforeTakeDamage;
+    public event Action OnTakeDamage;
+    public event Action AfterTakeDamage;
+    public event Action OnHPBelowZero;
+
+    public GameObject Entity => gameObject;
+
+    public int Priority => 2;
+
+    public Transform[] possibleTragets { get;set; }
+
+    public void TakeDamage(float damage)
+    {
+        throw new NotImplementedException();
+    }
 }

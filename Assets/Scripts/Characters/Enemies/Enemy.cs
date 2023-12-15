@@ -9,6 +9,10 @@ namespace Characters.Enemies
     public abstract class Enemy : MonoBehaviour, IBuffable, IDamageable
     {
         public abstract int ID { get; }
+
+        public GameObject Entity => gameObject;
+        public abstract int Priority { get; }
+
         public EnemyStats Stats { get; private set; }
 
         public Animator Animator { get; private set; }

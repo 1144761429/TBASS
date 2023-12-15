@@ -48,18 +48,6 @@ namespace WeaponSystem
 
         public Transform BulletSpawnPos;
 
-        private void Awake()
-        {
-            // OnSwitchWeapon += (_) =>
-            // {
-            //     Debug.Log("SwitchWeaponInvoke");
-            // };
-            // OnChangeWeapon += (prevW, newW) =>
-            // {
-            //     Debug.Log(prevW.StaticData.Name + "   " + newW.StaticData.Name);
-            // };
-        }
-
         private void Start()
         {
             if (PrimaryWeaponID != 0)
@@ -114,16 +102,16 @@ namespace WeaponSystem
             
             graphicRep.transform.localRotation = Quaternion.Euler(0, 0, actualProjectileAngle);
             BulletSpawnPos.localRotation = Quaternion.Euler(0, 0, actualProjectileAngle);
-            
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                ChangeWeapon(ELoadoutWeaponType.Primary,100003);
-            }
-            
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                ChangeWeapon(ELoadoutWeaponType.Primary,100001);
-            }
+            //
+            // if (Input.GetKeyDown(KeyCode.C))
+            // {
+            //     ChangeWeapon(ELoadoutWeaponType.Primary,100003);
+            // }
+            //
+            // if (Input.GetKeyDown(KeyCode.V))
+            // {
+            //     ChangeWeapon(ELoadoutWeaponType.Primary,100001);
+            // }
         }
         
         public void ChangeWeapon(ELoadoutWeaponType loadoutWeaponType,int id)
@@ -262,16 +250,16 @@ namespace WeaponSystem
         /// </summary>
         private void SwitchWeapon()
         {
-            if (WeaponInputHandler.Instance.SwitchToPrimaryKeyPressed && CurrentWeapon != PrimaryWeapon && PrimaryWeapon != null)
+            if (PlayerInputHandler.IsSwitchToPrimaryWeaponPressedThisFrame && CurrentWeapon != PrimaryWeapon && PrimaryWeapon != null)
             {
                 SwitchWeaponTo(ELoadoutWeaponType.Primary);
             }
-            else if (WeaponInputHandler.Instance.SwitchToSecondaryKeyPressed && CurrentWeapon != SecondaryWeapon &&
+            else if (PlayerInputHandler.IsSwitchToSecondaryWeaponPressedThisFrame && CurrentWeapon != SecondaryWeapon &&
                      SecondaryWeapon != null)
             {
                 SwitchWeaponTo(ELoadoutWeaponType.Secondary);
             }
-            else if (WeaponInputHandler.Instance.SwitchToAdeptKeyPressed && CurrentWeapon != AdeptWeapon && AdeptWeapon != null)
+            else if (PlayerInputHandler.IsSwitchToAdeptWeaponPressedThisFrame && CurrentWeapon != AdeptWeapon && AdeptWeapon != null)
             {
                 SwitchWeaponTo(ELoadoutWeaponType.Adept);
             }

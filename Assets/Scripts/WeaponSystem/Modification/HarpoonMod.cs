@@ -26,7 +26,7 @@ public class HarpoonMod : WeaponModification
         
         weaponEvents = weapon.Events;
 
-        weaponEvents.AltFuncTriggerCondition += () => WeaponInputHandler.Instance.AltFunctionKeyPressed;
+        weaponEvents.AltFuncTriggerCondition += () => PlayerInputHandler.IsWeaponAltFuncPressedThisFrame;
         weaponEvents.AltFunc += Release;
         
         dependencyHandler.SecondaryShootCondition += IsNotInHarpoonMode;

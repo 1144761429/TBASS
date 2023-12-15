@@ -35,11 +35,11 @@ namespace WeaponSystem
             InitAimIndicator(staticData.AimIndicatorType);
             HideAimVisual();
             
-            AimTrigger += () => WeaponInputHandler.Instance.AltFunctionKeyHeld;
+            AimTrigger += () => PlayerInputHandler.IsWeaponAltFuncPressed;
             AimCondition += ()=> !_dependencyHandler.IsReloading;
             ActionBeforeAim += DisplayAimVisual;
             ActionOnAim += ShrinkAimCone;
-            AimCancelCondition += () => WeaponInputHandler.Instance.AltFunctionKeyReleased;
+            AimCancelCondition += () => PlayerInputHandler.IsWeaponAltFuncCanceled;
             ActionOnCancelingAim += HideAimVisual;
             ActionOnCancelingAim += ResetAimAngle;
 

@@ -4,10 +4,13 @@ namespace Characters.Enemies
 {
     public class PatrolRioter : Enemy
     {
-        private EnemyStateMachine_PatrolRioter _sm;
-
         public override int ID => 10001;
 
+        public override int Priority => 1; 
+        
+        private EnemyStateMachine_PatrolRioter _sm;
+        
+        
         protected override void Awake()
         {
             base.Awake();
@@ -21,7 +24,6 @@ namespace Characters.Enemies
             base.Update();
             
             _sm.UpdateStateMachine();
-            
         }
     }
 }

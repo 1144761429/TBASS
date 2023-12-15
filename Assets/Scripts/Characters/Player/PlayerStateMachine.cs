@@ -49,13 +49,13 @@ public class PlayerStateMachine : MonoBehaviour
         _movementSM.AddState(EPlayerMovementState.Run, _runState);
         _movementSM.AddTwoWayTransition(new Transition<EPlayerMovementState>(EPlayerMovementState.Walk,
             EPlayerMovementState.Run,
-            transition => _inputHandler.IsHoldingSprint));
+            transition => PlayerInputHandler.IsHoldingSprint));
         _movementSM.SetStartState(EPlayerMovementState.Walk);
 
         _superSM.AddState(EPlayerState.Idle, _idleState);
         _superSM.AddState(EPlayerState.Move, _movementSM);
         _superSM.AddTwoWayTransition(new Transition<EPlayerState>(EPlayerState.Idle, EPlayerState.Move,
-            transition => _inputHandler.MovementInput.magnitude != 0));
+            transition => PlayerInputHandler.MovementInput.magnitude != 0));
 
         _superSM.SetStartState(EPlayerState.Idle);
         _superSM.Init();
