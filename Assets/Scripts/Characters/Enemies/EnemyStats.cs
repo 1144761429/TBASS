@@ -11,18 +11,22 @@ namespace Characters.Enemies
     /// </summary>
     public abstract class EnemyStats : MonoBehaviour
     {
-        /// <summary>
-        /// Subscribe to this event to perform actions when player's HP changes.
-        /// </summary>
         public event EventHandler<HealthChangeEventArgs> OnHealthChange;
+        
+        // TODO: Add the following events to methods.
+        public event EventHandler<HealthChangeEventArgs> OnHealthIncrease;
+        public event EventHandler<HealthChangeEventArgs> OnHealthDecrease;
         
         protected Enemy _enemy;
         [field: SerializeField] public int ID { get; private set; }
         public String Name { get; private set; }
         
         public abstract EnemyData StaticData { get; protected set; }
-        public RuntimeEnemyData RuntimeData { get; private set; }
-        
+        public abstract RuntimeEnemyData RuntimeData { get; protected set; }
+
+        public void Awake(){
+             InitializeData();   
+        }
 
         public void AddHp(float amount, out float overflowAmount, bool triggerHpChangeEvent = true)
         {
@@ -61,5 +65,17 @@ namespace Characters.Enemies
         
             if (triggerHpChangeEvent) OnHealthChange?.Invoke(this, args);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// protected bool IsValidID(){
+        ///     return true;
+        /// }
+
+        /// <summary>
+        /// Initialize static data and create runtime data in this method.
+        /// </summary>
+        protected abstract void InitializeData();
     }
 }
