@@ -1,6 +1,6 @@
 ﻿namespace Characters.Enemies.SerializableData
 {
-    public class DummyData
+    public class DummyData : EnemyData
     {
         
     }
