@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using BuffSystem.Common;
 using Characters.Enemies.SerializableData;
 using Newtonsoft.Json;
@@ -37,14 +38,14 @@ public class DatabaseUtil
     }
 
     //TODO: Find a generic method for fetching item data
-    public ItemDataConsumableSupply GetItemDataConsumableSupply(int id)
+    public ItemDataConsumableSupply GetItemDataConsumableSupply(string name, int id)
     {
-        if (_itemConsumableSupplyDB.TryGetValue(id, out ItemDataConsumableSupply itemData))
+        if (IsValidConsumableItem(name, id, out ItemDataConsumableSupply data))
         {
-            return itemData;
+            return data;
         }
 
-        throw new Exception($"Retrieving data failed due to item id does not exist. ID: {id}");
+        return null;
     }
 
     public ItemDataEquipmentWeapon GetItemDataEquipmentWeapon(int id)
@@ -114,6 +115,18 @@ public class DatabaseUtil
         throw new ArgumentException("Invalid Enemy ID.\n" +
                                     $"ID: {id}");
     }
+
+    public static bool IsValidConsumableItem(string name, int id, out ItemDataConsumableSupply data)
+    {
+        if (Instance._itemConsumableSupplyDB.TryGetValue(id, out ItemDataConsumableSupply d))
+        {
+            data = d;
+            return name.Equals(d.Name);
+        }
+        
+        throw new ArgumentException($"The name and id of the item does not match in the database." +
+                                        $"Your input ID: {id}, expected name: {name}.");
+    }
     
     private void InitDBDict()
     {
@@ -180,7 +193,7 @@ public class DatabaseUtil
     private void DebugDict()
     {
         string content = "";
-        foreach (var item in _itemEquipmentWeaponDB)
+        foreach (var item in _itemConsumableSupplyDB)
         {
             content += $"{item.Key} : {item.Value.Name}\n";
         }

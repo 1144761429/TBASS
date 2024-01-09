@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace AbilitySystem
 {
@@ -6,6 +7,6 @@ namespace AbilitySystem
     {
         public Transform CasterTransform { get; }
         public bool CannotCast { get; set; }
-        public Ability[] Abilities { get; }
+        public List<Ability> Abilities { get; }
     }
 }

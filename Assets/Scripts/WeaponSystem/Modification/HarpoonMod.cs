@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WeaponSystem;
+using WeaponSystem.DamagingEntities;
 using WeaponSystem.Modification;
 
 public class HarpoonMod : WeaponModification
@@ -63,7 +64,7 @@ public class HarpoonMod : WeaponModification
         return !isInHarpoonMode;
     }
     
-    private void EnterHarpoonMode(GameObject gameObj)
+    private void EnterHarpoonMode(GameObject gameObj, Projectile bullet)
     {
         isInHarpoonMode = true;
     }
@@ -73,7 +74,7 @@ public class HarpoonMod : WeaponModification
         isInHarpoonMode = false;
     }
 
-    private void SetTarget(GameObject target)
+    private void SetTarget(GameObject target, Projectile bullet)
     {
         this.target = target;
     }

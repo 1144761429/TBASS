@@ -6,22 +6,30 @@ public class PlayerHealthAndShieldCheat : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            PlayerStats.Instance.AddHp(10);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentHealth);
+            PlayerStats.Instance.AddHp(10, out float overflowAmount);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentHealth);
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-            PlayerStats.Instance.ReduceHp(10);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentHealth);
+            PlayerStats.Instance.ReduceHp(10, out float overflowAmount);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentHealth);
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            PlayerStats.Instance.AddCurrentShield(10);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentArmor);
+            PlayerStats.Instance.AddArmor(10, out float overflowAmount);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentArmor);
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad3))
+        if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            PlayerStats.Instance.ReduceCurrentShield(10);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentArmor);
+            PlayerStats.Instance.ReduceArmor(10, out float overflowAmount);
+            Debug.Log(PlayerStats.Instance.RuntimeData.CurrentArmor);
         }
     }
 }

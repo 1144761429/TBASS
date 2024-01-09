@@ -1,6 +1,8 @@
 using System;
 using BuffSystem.Buffs;
 using BuffSystem.Common;
+using Characters.Player.Data;
+using UISystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,12 +13,12 @@ public class PlayerStats : MonoBehaviour, IBuffable
     /// <summary>
     /// Subscribe to this event to perform actions when player's HP changes.
     /// </summary>
-    public event Action HpChangeCallback;
+    public event EventHandler<HealthChangeEventArgs> OnHealthChange;
 
     /// <summary>
     /// Subscribe to this event to perform actions when player's shield changes.
     /// </summary>
-    public event Action ShieldChangeCallback;
+    public event EventHandler<ArmorChangeEventArgs> OnArmorChange;
 
     /// <summary>
     /// The original data of player in form of <c>ScriptableObject</c>.
@@ -24,12 +26,12 @@ public class PlayerStats : MonoBehaviour, IBuffable
     /// This helps to avoid directly manipulating the source data.
     /// So, we don't need to reset the source data to what it was like before game starts every time.
     /// </summary>
-    [SerializeField] private PlayerDataSO sourceData;
+    [SerializeField] private PlayerDataSO staticData;
 
     /// <summary>
     /// The copy, which we manipulate in game, of sourceData.
     /// </summary>
-    public PlayerDataSO RuntimeData { get; private set; }
+    public RuntimePlayerData RuntimeData { get; private set; }
 
     public bool CanTakeBuff => true;
     public bool IsBleedResist => false;
@@ -41,8 +43,7 @@ public class PlayerStats : MonoBehaviour, IBuffable
         InitSingleton();
 
         // Copy the sourceData and initialize the RuntimeData
-        RuntimeData = Instantiate(sourceData);
-        RuntimeData.Init();
+        RuntimeData = new RuntimePlayerData(staticData);
 
         BuffHandler = new BuffHandler();
     }
@@ -58,113 +59,81 @@ public class PlayerStats : MonoBehaviour, IBuffable
     }
     // ========================================Test Purpose========================================
 
-    /// <summary>
-    /// Add a specific amount of hp to <c>CurrentHp</c>.
-    /// If the amount to add is negative, then the method will automatically call <code>ReduceHp(amount * -1)</code>
-    /// </summary>
-    /// <param name="amount">Amount of hp to add.</param>
-    /// <param name="triggerHpChangeEvent">True if should call <c>HpChangeCallback</c> after adding hp.</param>
-    public void AddHp(float amount, bool triggerHpChangeEvent = true)
+
+    public void AddHp(float amount, out float overflowAmount, bool triggerHpChangeEvent = true)
     {
         if (amount < 0)
         {
-            ReduceHp(amount);
-            return;
+            throw new ArgumentException("Health amount to add must be non-negative.", nameof(amount));
         }
 
-        RuntimeData.CurrentHp = Mathf.Min(RuntimeData.CurrentHp + amount, RuntimeData.MaxHp);
+        float healthBeforeChange = RuntimeData.CurrentHealth;
+        
+        overflowAmount = Mathf.Max(0, RuntimeData.CurrentHealth + amount - staticData.MaxHP);
+        float actualAmountToAdd = amount - overflowAmount;
+        RuntimeData.AddHealth(actualAmountToAdd);
 
-        if (triggerHpChangeEvent) HpChangeCallback?.Invoke();
+        HealthChangeEventArgs args =
+            new HealthChangeEventArgs(healthBeforeChange, RuntimeData.CurrentHealth, staticData.MaxHP);
+
+        if (triggerHpChangeEvent) OnHealthChange?.Invoke(this, args);
     }
 
-    /// <summary>
-    /// Add a specific amount hp to <c>CurrentHp</c> and check if it will overflow (though the actual <c>CurrentHp</c> will not pass <c>MaxHp</c>).
-    /// If the amount to add is negative, then the method will automatically call <code>ReduceHp(amount * -1, out overflowAmount)</code>
-    /// </summary>
-    /// <param name="amount">Amount of hp to add.</param>
-    /// <param name="overflowAmount">Amount of hp that will overflow</param>
-    /// <param name="triggerHpChangeEvent">True if should call <c>HpChangeCallback</c> after adding hp.</param>
-    /// <returns>True if adding the specific amount of hp will cause an overflow. False if not. </returns>
-    public bool AddHp(float amount, out float overflowAmount, bool triggerHpChangeEvent = true)
+    public void ReduceHp(float amount, out float overflowAmount, bool triggerHpChangeEvent = true)
     {
         if (amount < 0)
         {
-            return ReduceHp(amount * -1, out overflowAmount);
+            throw new ArgumentException("Health amount to reduce must be non-negative.", nameof(amount));
         }
 
-        float finalHp = Mathf.Min(RuntimeData.CurrentHp + amount, RuntimeData.MaxHp);
-        overflowAmount = Mathf.Max(0, finalHp - RuntimeData.MaxHp);
+        float healthBeforeChange = RuntimeData.CurrentHealth;
+        
+        overflowAmount = Mathf.Min(0, RuntimeData.CurrentHealth - staticData.MinHP - amount);
+        float actualAmountToReduce = amount - overflowAmount;
+        RuntimeData.ReduceHealth(actualAmountToReduce);
 
-        RuntimeData.CurrentHp = finalHp;
-
-        if (triggerHpChangeEvent)
-        {
-            HpChangeCallback?.Invoke();
-        }
-
-        return overflowAmount > 0;
+        HealthChangeEventArgs args =
+            new HealthChangeEventArgs(healthBeforeChange, RuntimeData.CurrentHealth, staticData.MaxHP);
+        
+        if (triggerHpChangeEvent) OnHealthChange?.Invoke(this, args);
     }
 
-    /// <summary>
-    /// Reduce a specific amount of hp from <c>CurrentHp</c>.
-    /// If the amount to reduce is negative, then the method will automatically call <code>AddHp(amount * -1)</code>
-    /// </summary>
-    /// <param name="amount">Amount of hp to reduce</param>
-    /// <param name="triggerHpChangeEvent">True if should call <c>HpChangeCallback</c> after adding hp.</param>
-    public void ReduceHp(float amount, bool triggerHpChangeEvent = true)
+    public void AddArmor(float amount, out float overflowAmount, bool triggerArmorChangeEvent = true)
     {
         if (amount < 0)
         {
-            AddHp(amount);
-            return;
+            throw new ArgumentException("Armor amount to add must be non-negative.", nameof(amount));
         }
 
-        RuntimeData.CurrentHp = Mathf.Max(RuntimeData.CurrentHp - amount, RuntimeData.MinHp);
+        float armorBeforeChange = RuntimeData.CurrentArmor;
+        
+        overflowAmount = Mathf.Max(0, RuntimeData.CurrentArmor + amount - staticData.MaxArmor);
+        float actualAmountToAdd = amount - overflowAmount;
+        RuntimeData.AddArmor(actualAmountToAdd);
 
-        if (triggerHpChangeEvent) HpChangeCallback?.Invoke();
+        ArmorChangeEventArgs args =
+            new ArmorChangeEventArgs(armorBeforeChange, RuntimeData.CurrentArmor, staticData.MaxArmor);
+        
+        if (triggerArmorChangeEvent) OnArmorChange?.Invoke(this, args);
     }
 
-    /// <summary>
-    /// Reduce a specific amount of hp from <c>CurrentHp</c> and check if it will overflow (though the actual <c>CurrentHp</c> will not pass <c>MinHp</c>).
-    /// If the amount to reduce is negative, then the method will automatically call <code>AddHp(amount * -1, out overflowAmount)</code>
-    /// </summary>
-    /// <param name="amount">Amount of hp to reduce</param>
-    /// <param name="overflowAmount">Amount of hp that will overflow</param>
-    /// <param name="triggerHpChangeEvent">True if should call <c>HpChangeCallback</c> after adding hp.</param>
-    public bool ReduceHp(float amount, out float overflowAmount, bool triggerHpChangeEvent = true)
+    public void ReduceArmor(float amount, out float overflowAmount, bool triggerShieldChangeEvent = true)
     {
         if (amount < 0)
         {
-            return AddHp(amount, out overflowAmount);
+            throw new ArgumentException("Armor amount to reduce must be non-negative.", nameof(amount));
         }
 
-        float finalHp = Mathf.Max(RuntimeData.CurrentHp - amount, RuntimeData.MinHp);
-        overflowAmount = Mathf.Max(0, RuntimeData.MinHp - finalHp);
+        float armorBeforeChange = RuntimeData.CurrentArmor;
+        
+        overflowAmount = Mathf.Min(0, RuntimeData.CurrentArmor - staticData.MinArmor - amount);
+        float actualAmountToReduce = amount - overflowAmount;
+        RuntimeData.ReduceArmor(actualAmountToReduce);
 
-        RuntimeData.CurrentHp = finalHp;
+        ArmorChangeEventArgs args =
+            new ArmorChangeEventArgs(armorBeforeChange, RuntimeData.CurrentArmor, staticData.MaxArmor);
 
-        if (triggerHpChangeEvent)
-        {
-            HpChangeCallback?.Invoke();
-        }
-
-        return overflowAmount > 0;
-    }
-
-    public void AddCurrentShield(float amount, bool triggerShieldChangeEvent = true)
-    {
-        RuntimeData.CurrentSheild = RuntimeData.CurrentSheild + amount > RuntimeData.MaxShield
-            ? RuntimeData.MaxShield
-            : RuntimeData.CurrentSheild + amount;
-        if (triggerShieldChangeEvent) ShieldChangeCallback?.Invoke();
-    }
-
-    public void ReduceCurrentShield(float amount, bool triggerShieldChangeEvent = true)
-    {
-        RuntimeData.CurrentSheild = RuntimeData.CurrentSheild - amount < RuntimeData.MinShield
-            ? RuntimeData.MinShield
-            : RuntimeData.CurrentSheild - amount;
-        if (triggerShieldChangeEvent) ShieldChangeCallback?.Invoke();
+        if (triggerShieldChangeEvent) OnArmorChange?.Invoke(this, args);
     }
 
     private void InitSingleton()

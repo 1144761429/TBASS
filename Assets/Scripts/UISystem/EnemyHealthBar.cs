@@ -26,7 +26,7 @@ public class EnemyHealthBar : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        float ratio = _data.CurrentHP / _data.StaticData.MaxHP;
+        float ratio = _data.RuntimeData.CurrentHealth / _data.RuntimeData.MaxHP;
         fill.fillAmount = ratio;
     }
 }

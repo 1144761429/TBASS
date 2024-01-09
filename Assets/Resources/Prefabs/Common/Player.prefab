@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1311402341717244854}
   - component: {fileID: 6111526837032598573}
   - component: {fileID: 5500026970480494102}
-  m_Layer: 0
-  m_Name: Interactor
-  m_TagString: Untagged
+  m_Layer: 8
+  m_Name: Player Interactor
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6188e996cb4574f4bb68236809edabb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Radius>k__BackingField: 0
 --- !u!58 &5500026970480494102
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed95ac6b3e6f1e141b13eda5bb155574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sourceData: {fileID: 11400000, guid: 51784fb24c04f9247884a972d438ec7f, type: 2}
+  staticData: {fileID: 11400000, guid: 51784fb24c04f9247884a972d438ec7f, type: 2}
 --- !u!114 &6965156569277118432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,6 +323,30 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 5f0c64e1-e45f-4089-b84c-2f5b257dddd6
     m_ActionName: Gameplay/AbilityQ[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0dc561b7-bda1-4ad8-8663-eed02942a955
+    m_ActionName: Gameplay/WeaponMainFunc[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 43a90596-3a03-4870-ab14-36d56f6e189c
+    m_ActionName: Gameplay/WeaponAltFunc[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bf39dbe9-e193-42d7-a271-2de51fef05f5
+    m_ActionName: Gameplay/WeaponReload[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9a8dc7c-23cd-4724-b018-7f4a6da5e8ff
+    m_ActionName: Gameplay/SwitchToPrimaryWeapon[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7b03297a-9b29-4ef6-a0ef-4435f72ea28c
+    m_ActionName: Gameplay/SwitchToSecondaryWeapon[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 41f2e246-1f19-4fbb-8788-6668687495f5
+    m_ActionName: Gameplay/SwitchToAdeptWeapon[/Keyboard/3]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: Gameplay
@@ -351,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9316d5a771b5a43b82b2e09ee57776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphicRep: {fileID: 0}
+  graphicRep: {fileID: 6965156570003955172}
   <MovementCollider>k__BackingField: {fileID: 6965156568649962833}
   <CollisionOffset>k__BackingField: 0.05
   _movementCollisionFilter:
@@ -516,15 +541,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8651127893921637022, guid: cfcc0f7613c09f441a2ce4512a0ac167, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.9314594
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8651127893921637022, guid: cfcc0f7613c09f441a2ce4512a0ac167, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.167486
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8651127893921637022, guid: cfcc0f7613c09f441a2ce4512a0ac167, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0038396684
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8651127893921637022, guid: cfcc0f7613c09f441a2ce4512a0ac167, type: 3}
       propertyPath: m_LocalRotation.w

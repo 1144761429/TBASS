@@ -1,13 +1,14 @@
+using Characters.Player.Data;
 using UnityEngine;
 using FSM;
 
 public class PlayerWalkState : StateBase<EPlayerMovementState>
 {
-    private PlayerDataSO _data;
+    private RuntimePlayerData _data;
     private Animator _animator;
     private PlayerSpeedHandler _speedHandler;
 
-    public PlayerWalkState(PlayerDataSO data, Animator animator, PlayerSpeedHandler speedHandler) : base(false, false)
+    public PlayerWalkState(RuntimePlayerData data, Animator animator, PlayerSpeedHandler speedHandler) : base(false, false)
     {
         _data = data;
         _animator = animator;

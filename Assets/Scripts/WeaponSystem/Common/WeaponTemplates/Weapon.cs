@@ -18,14 +18,13 @@ namespace WeaponSystem
         /// </summary>
         public int ID => StaticData.ID;
 
-        public ELoadoutWeaponType LoadoutWeaponType { get; set; }
+        public ELoadoutSlot LoadoutSlot { get; set; }
 
         /// <summary>
         /// The gameObject this weapon belongs to.
         /// </summary>
         [field: SerializeField]
-        public GameObject
-            Wielder { get; private set; } //TODO: make this member variable get its value automatically in Awake()
+        public GameObject Wielder { get; private set; } //TODO: make this member variable get its value automatically in Awake()
 
         /// <summary>
         /// The loadout this weapon belongs to.

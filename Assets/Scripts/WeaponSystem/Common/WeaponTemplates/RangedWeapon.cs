@@ -9,6 +9,6 @@ namespace WeaponSystem
         
         public abstract EBulletType ProjectileType { get; }
         
-        public DamagingEntity Projectile;
+        public Bullet Bullet;
     }
 }

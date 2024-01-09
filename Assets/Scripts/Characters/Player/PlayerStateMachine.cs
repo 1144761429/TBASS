@@ -1,3 +1,4 @@
+using Characters.Player.Data;
 using UnityEngine;
 using FSM;
 
@@ -15,7 +16,7 @@ public enum EPlayerMovementState
 
 public class PlayerStateMachine : MonoBehaviour
 {
-    private PlayerDataSO _data;
+    private RuntimePlayerData _data;
     private Animator _animator;
     private PlayerSpeedHandler _speedHandler;
     private PlayerInputHandler _inputHandler;

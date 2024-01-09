@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MaxHp>k__BackingField: 100
   <MinHp>k__BackingField: 0
-  <MaxShield>k__BackingField: 40
-  <MinShield>k__BackingField: 0
+  <MaxArmor>k__BackingField: 50
+  <MinArmor>k__BackingField: 0
   <WalkSpeed>k__BackingField: 5
   <SprintSpeed>k__BackingField: 8

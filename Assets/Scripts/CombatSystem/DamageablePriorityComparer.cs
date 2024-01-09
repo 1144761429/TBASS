@@ -4,27 +4,26 @@ using UnityEngine;
 
 namespace CombatSystem
 {
-    public class DamageablePriorityComparer:Comparer<GameObject>
+    public class DamageablePriorityComparer : Comparer<IDamageable>
     {
-        public override int Compare(GameObject x, GameObject y)
+        public override int Compare(IDamageable x, IDamageable y)
         {
-            try
+            if (x == null)
             {
-                IDamageable d1 = x.GetComponent<IDamageable>();
-                IDamageable d2 = y.GetComponent<IDamageable>();
-                
-                if (d1.Priority >= d2.Priority)
-                {
-                    return 1;
-                }
+                throw new NullReferenceException("The left-hand side argument is null.");
+            }
+            
+            if (y == null)
+            {
+                throw new NullReferenceException("The right-hand side argument is null.");
+            }
+            
+            if (x.TargetPriority >= y.TargetPriority)
+            {
+                return 1;
+            }
 
-                return -1;
-            }
-            catch (NullReferenceException e)
-            {
-                Debug.Log($"{x.name} or {y.name} has no script derived from IDamageable attached on it.");
-                throw;
-            }
+            return -1;
         }
     }
 }

@@ -1,83 +1,81 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using BuffSystem.Common;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
-public class WrappedItem<T> where T : ItemData
+public class WrappedItem : IDisplayable
 {
-    public T Data;
-    public IntWrapper Amount;
-
-    public string Name
+    public static event Action OnIncreaseAmount;
+    
+    public int Amount { get; private set; }
+    
+    public ItemData StaticData { get; private set; }
+    public string Name => StaticData.Name;
+    public int ID => StaticData.ID;
+    public EItemType Type => StaticData.Type;
+    public int Priority => 0;
+    
+    
+    public WrappedItem(string name, int id, int amount)
     {
-        get
-        {
-            if (Data == null)
-            {
-                throw new Exception("Data is not assigned.");
-            }
-            return Data.Name;
-        }
-    }
-    public int ID
-    {
-        get
-        {
-            if (Data == null)
-            {
-                throw new Exception("Data is not assigned.");
-            }
-            return Data.ID;
-        }
-    }
-    public EItemType Type
-    {
-        get
-        {
-            if (Data == null)
-            {
-                throw new Exception("Data is not assigned.");
-            }
-            return Data.Type;
-        }
-    }
-
-    public WrappedItem(T data, IntWrapper amount)
-    {
-        Data = data;
+        StaticData = DatabaseUtil.Instance.GetItemDataConsumableSupply(name, id);
         Amount = amount;
     }
 
-    public override string ToString()
+    public bool IncreaseAmount(int amount)
     {
-        return $"Contained Item: {Data.ToString()}"
-        + $"Amount: {Amount.Value}";
+        Amount += amount;
+        return true;
     }
 
-    public override bool Equals(object obj)
+    public bool DecreaseAmount(int amount)
     {
-        PropertyInfo propInfo = obj.GetType().GetProperty("ID");
-        if (propInfo != null)
+        if (Amount - amount < 0)
         {
-            object propertyValue = propInfo.GetValue(obj);
-            int i = (int)propertyValue;
-            return ID == i;
+            Amount = 0;
+            return true;
         }
-        else
+
+        Amount -= amount;
+        return true;
+    }
+
+    public void SetAmount(int amount)
+    {
+        Amount = amount;
+    }
+
+    public WrappedItem Clone()
+    {
+        WrappedItem clone = new WrappedItem(Name, ID, Amount);
+
+        return clone;
+    }
+    
+    public override string ToString()
+    {
+        return $"Item Name: {Name} "
+               + $"ID: {ID} "
+               + $"Amount: {Amount} ";
+    }
+
+    public override bool Equals([NotNull] object obj)
+    {
+        if (obj is not WrappedItem other)
         {
+            Debug.Log("not item data");
             return false;
         }
+
+        return StaticData.ID == other.ID && StaticData.Name.Equals(other.Name);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Data);
-    }
-}
-
-[Serializable]
-public class WrappedItem : WrappedItem<ItemData>
-{
-    public WrappedItem(ItemData data, IntWrapper amount) : base(data, amount)
-    {
+        return HashCode.Combine(Name.GetHashCode(), ID.GetHashCode());
     }
 }

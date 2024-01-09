@@ -619,6 +619,19 @@ namespace System.Collections.Generic
             _version++;
         }
 
+        public bool Contains(TElement element)
+        {
+            foreach (var node in _nodes)
+            {
+                if (node.Element != null && node.Element.Equals(element))
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
         /// <summary>
         ///     Ensures that the <see cref="PriorityQueue{TElement, TPriority}" /> can hold up to
         ///     <paramref name="capacity" /> items without further expansion of its backing storage.

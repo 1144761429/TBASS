@@ -8,7 +8,7 @@ using UnityTimer;
 namespace BuffSystem.Common
 {
     /// <summary>
-    /// The base class for all the buffs.
+    /// The base class for all the status.
     /// A buff in the game must inherits this class, and may have many other interfaces as well. E.g., IFinalDmgBuff, IEffectOverTimeBuff, etc.
     /// </summary>
     public abstract class Buff : IStackable

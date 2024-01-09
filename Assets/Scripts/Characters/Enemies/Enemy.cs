@@ -11,9 +11,9 @@ namespace Characters.Enemies
         public abstract int ID { get; }
 
         public GameObject Entity => gameObject;
-        public abstract int Priority { get; }
+        public abstract int TargetPriority { get; }
 
-        public EnemyStats Stats { get; private set; }
+        public EnemyStats Stats { get; set; }
 
         public Animator Animator { get; private set; }
         public Rigidbody2D RigidBody { get; private set; }
@@ -25,7 +25,7 @@ namespace Characters.Enemies
 
         protected virtual void Awake()
         {
-            Stats = new EnemyStats(this, ID);
+            Stats = GetComponent<EnemyStats>();
             
             RigidBody = GetComponent<Rigidbody2D>();
             RigidBody.gravityScale = 0;
@@ -33,18 +33,6 @@ namespace Characters.Enemies
             Agent = GetComponent<NavMeshAgent>();
             Agent.updateRotation = false;
             Agent.updateUpAxis = false;
-            
-            OnHPBelowZero += Die;
-        }
-
-        protected virtual void Update()
-        {
-            
-        }
-
-        private void Die()
-        {
-            Destroy(gameObject);
         }
 
         #region IBuffable
@@ -68,12 +56,11 @@ namespace Characters.Enemies
         {
             BeforeTakeDamage?.Invoke();
             
-            float finalHP = Mathf.Max(Stats.CurrentHP - damage, 0);
-            Stats.SetCurrentHP(finalHP);
+            Stats.ReduceHp(damage, out float overflowAmount);
             OnTakeDamage?.Invoke();
             AfterTakeDamage?.Invoke();
 
-            if (finalHP <= Stats.StaticData.MinHP)
+            if (damage <= Stats.StaticData.MinHP)
             {
                 OnHPBelowZero?.Invoke();
             }

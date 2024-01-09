@@ -4,7 +4,13 @@ using UnityTimer;
 
 namespace AbilitySystem
 {
-    public abstract class Ability
+    public enum EAbilityName
+    {
+        None = 0,
+        SentryGun = 1
+    }
+
+    public abstract class Ability : ScriptableObject
     {
         public event Func<bool> CastRestrictions;
         public event Action BeforeCast;
@@ -17,9 +23,12 @@ namespace AbilitySystem
         public bool CooldownPassed { get; protected set; }
         public Timer CooldownTimer{ get; protected set; }
 
-        protected Ability(IAbilityCaster caster)
+        /// <summary>
+        /// A method that initialize the ability.
+        /// </summary>
+        /// <param name="caster">The caster of this ability.</param>
+        public void Init(IAbilityCaster caster)
         {
-            Debug.Log("CTOR called");
             Caster = caster;
             
             CooldownPassed = true;

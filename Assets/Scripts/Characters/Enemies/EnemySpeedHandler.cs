@@ -1,10 +1,10 @@
-using Characters.Enemies.SerializableData;
+﻿using Characters.Enemies.SerializableData;
 using StackableElement;
 
 public enum EEnemySpeedElementType
 {
-    Patrol,
-    Chase
+    Walk,
+    Sprint
 }
 
 namespace Characters.Enemies
@@ -19,17 +19,16 @@ namespace Characters.Enemies
         }
 
         private SpeedHandler<EEnemySpeedElementType> _speedHandler;
-        private EnemyData _data;
 
-        public EnemySpeedHandler(Enemy entity, EnemyData data)
+        public EnemySpeedHandler(Enemy entity, PatrolRioterData data)
         {
             _entity = entity;
             _speedHandler = new SpeedHandler<EEnemySpeedElementType>();
             
-            _speedHandler.Add(EEnemySpeedElementType.Patrol,
-                new StackableElement<float>(data.PatrolSpeed, new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
+            _speedHandler.Add(EEnemySpeedElementType.Walk,
+                new StackableElement<float>(data.WalkSpeed, new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
                     new BoolWrapper(true)));
-            _speedHandler.Add(EEnemySpeedElementType.Chase, new StackableElement<float>(data.ChaseSpeed,
+            _speedHandler.Add(EEnemySpeedElementType.Sprint, new StackableElement<float>(data.SprintSpeed,
                 new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
                 new BoolWrapper(true)));
         }

@@ -1,9 +1,10 @@
 ﻿using System;
+using UISystem;
 using UnityEngine;
 
 namespace WeaponSystem
 {
-    public class LoadoutGraphic: MonoBehaviour
+    public class LoadoutGraphic : MonoBehaviour
     {
         [SerializeField] private Loadout loadout;
         [SerializeField] private Animator animator;
@@ -12,31 +13,21 @@ namespace WeaponSystem
         private void Awake()
         {
             loadout.OnSwitchWeapon += ChangeAnimatorController;
-            loadout.OnChangeWeapon += (loadoutWeaponType, prevWeapon, newWeapon) =>
-            {
-                ELoadoutWeaponType currentLoadoutWeaponType = loadout.CurrentLoadoutWeaponType;
-
-                // On changing weapon, only change the animator controller if the weapon to be changed is the one we are currently holding.
-                if (prevWeapon != null && loadoutWeaponType == currentLoadoutWeaponType)
-                {
-                    ChangeAnimatorController(currentLoadoutWeaponType);
-                }
-            };
+            loadout.OnChangeWeapon += ChangeAnimatorController;
         }
 
-        private void ChangeAnimatorController(ELoadoutWeaponType loadoutWeaponType)
+        private void ChangeAnimatorController(ChangeWeaponEventArgs args)
         {
-            //Debug.Log("Change Animator Controller called.");
             Weapon weapon = null;
-            switch (loadoutWeaponType)
+            switch (args.LoadoutSlot)
             {
-                case ELoadoutWeaponType.Primary:
+                case ELoadoutSlot.Primary:
                     weapon = loadout.PrimaryWeapon;
                     break;
-                case ELoadoutWeaponType.Secondary:
+                case ELoadoutSlot.Secondary:
                     weapon = loadout.SecondaryWeapon;
                     break;
-                case ELoadoutWeaponType.Adept:
+                case ELoadoutSlot.Adept:
                     weapon = loadout.AdeptWeapon;
                     break;
             }
@@ -45,8 +36,36 @@ namespace WeaponSystem
             {
                 throw new NullReferenceException("Weapon is null.");
             }
-            
-            AnimatorOverrideController animatorOverrideController = Resources.Load<AnimatorOverrideController>(weapon.StaticData.AnimatorOverrideControllerPath);
+
+            AnimatorOverrideController animatorOverrideController =
+                Resources.Load<AnimatorOverrideController>(weapon.StaticData.AnimatorOverrideControllerPath);
+            animator.runtimeAnimatorController = animatorOverrideController;
+        }
+
+        private void ChangeAnimatorController(ELoadoutSlot slot)
+        {
+            //Debug.Log("Change Animator Controller called.");
+            Weapon weapon = null;
+            switch (slot)
+            {
+                case ELoadoutSlot.Primary:
+                    weapon = loadout.PrimaryWeapon;
+                    break;
+                case ELoadoutSlot.Secondary:
+                    weapon = loadout.SecondaryWeapon;
+                    break;
+                case ELoadoutSlot.Adept:
+                    weapon = loadout.AdeptWeapon;
+                    break;
+            }
+
+            if (weapon == null)
+            {
+                throw new NullReferenceException("Weapon is null.");
+            }
+
+            AnimatorOverrideController animatorOverrideController =
+                Resources.Load<AnimatorOverrideController>(weapon.StaticData.AnimatorOverrideControllerPath);
             animator.runtimeAnimatorController = animatorOverrideController;
         }
     }

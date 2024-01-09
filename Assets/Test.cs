@@ -15,7 +15,7 @@ public class Test : MonoBehaviour, IDamageable
 
     public GameObject Entity => gameObject;
 
-    public int Priority => 2;
+    public int TargetPriority => 2;
 
     public Transform[] possibleTragets { get;set; }
 

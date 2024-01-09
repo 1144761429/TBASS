@@ -8,7 +8,7 @@ public class ItemData
     public EItemType Type;
     public EItemRarity Rarity;
     public string SpritePath;
-
+    
     public override string ToString()
     {
         return $"ID: {ID}\n"

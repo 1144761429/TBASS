@@ -1,11 +1,12 @@
+using Characters.Player.Data;
 using UnityEngine;
 using FSM;
 public class PlayerIdleState : StateBase<EPlayerState>
 {
-    private PlayerDataSO _data;
+    private RuntimePlayerData _data;
     private Animator _animator;
 
-    public PlayerIdleState(PlayerDataSO data, Animator animator) : base(false, false)
+    public PlayerIdleState(RuntimePlayerData data, Animator animator) : base(false, false)
     {
         _data = data;
         _animator = animator;

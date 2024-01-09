@@ -34,15 +34,15 @@ namespace WeaponSystem
 
         #endregion
         
-        private PanelChargeModuleBar _panelChargeModuleBar;
+        //private PanelChargeModuleBar _panelChargeModuleBar;
 
         public ChargeModule(Weapon weapon, ItemDataEquipmentWeapon staticData,
             RuntimeItemDataEquipmentWeapon runtimeData) : base(weapon,
             weapon, staticData, runtimeData)
         {
-            OnChargeStart += UIManagerScreenSpace.Instance.OpenPanelChargeModuleBar;
-            OnCharging += UIManagerScreenSpace.Instance.UpdatePanelChargeModuleBar;
-            OnChargeCancel += UIManagerScreenSpace.Instance.ClosePanelChargeModuleBar;
+            // OnChargeStart += UIManagerScreenSpace.Instance.OpenPanelChargeModuleBar;
+            // OnCharging += UIManagerScreenSpace.Instance.UpdatePanelChargeModuleBar;
+            // OnChargeCancel += UIManagerScreenSpace.Instance.ClosePanelChargeModuleBar;
             
             //TODO: when switching weapon, close the PanelChargeModuleBar.
 

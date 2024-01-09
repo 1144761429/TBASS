@@ -8,17 +8,25 @@ public class Interactor : MonoBehaviour
     public Action<IInteractable> OnAddInteractableToList;
     public Action<IInteractable> OnRemoveInteractableFromList;
 
+    [field:SerializeField] public float Radius { get; private set; }
+    
     private CircleCollider2D _collider;
     private Dictionary<GameObject, IInteractable> _interactables;
 
-    public int Amount
-    {
-        get { return _interactables.Count; }
-    }
+    /// <summary>
+    /// The number of interactable GameObjects within the distance of the Interactor.
+    /// </summary>
+    public int Amount => _interactables.Count;
 
     private void Awake()
     {
+        if (Radius == 0)
+        {
+            Debug.LogWarning($"The radius of interactor attached on {gameObject} is 0.");
+        }
+        
         _collider = GetComponent<CircleCollider2D>();
+        _collider.radius = Radius;
         _interactables = new Dictionary<GameObject, IInteractable>();
     }
 
@@ -26,7 +34,7 @@ public class Interactor : MonoBehaviour
     {
         if (other.TryGetComponent<IInteractable>(out IInteractable interactable))
         {
-            if (interactable.AutoInteractable)
+            if (interactable.IsAutoInteractable)
             {
                 interactable.Interact();
             }
@@ -39,12 +47,12 @@ public class Interactor : MonoBehaviour
     }
 
     //Consider to remove this trigger check since it costs performance
-    private void OnTriggerStay2D(Collider2D other)
+    private IEnumerator OnTriggerStay2D(Collider2D other)
     {
         if (other.TryGetComponent<IInteractable>(out IInteractable interactable) &&
             !_interactables.ContainsKey(other.gameObject))
         {
-            if (interactable.AutoInteractable)
+            if (interactable.IsAutoInteractable)
             {
                 interactable.Interact();
             }
@@ -54,6 +62,8 @@ public class Interactor : MonoBehaviour
                 OnAddInteractableToList?.Invoke(interactable);
             }
         }
+
+        yield return new WaitForSeconds(0.2f);
     }
 
     private void OnTriggerExit2D(Collider2D other)

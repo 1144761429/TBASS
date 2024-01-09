@@ -1,11 +1,12 @@
 ﻿using System;
+using UISystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
 
 namespace WeaponSystem
 {
-    public enum ELoadoutWeaponType
+    public enum ELoadoutSlot
     {
         Primary,
         Secondary,
@@ -16,24 +17,23 @@ namespace WeaponSystem
     {
         public GameObject graphicRep;
         
-        public event Action<ELoadoutWeaponType> OnSwitchWeapon;
-        public event Action<ELoadoutWeaponType, Weapon, Weapon> OnChangeWeapon;
-        public event Action OnInitializeWeapon;
+        public event Action<ELoadoutSlot> OnSwitchWeapon;
+        public event Action<ChangeWeaponEventArgs> OnChangeWeapon;
         
         public Weapon CurrentWeapon;
-        public ELoadoutWeaponType CurrentLoadoutWeaponType { get; private set; }
+        public ELoadoutSlot CurrentLoadoutSlot { get; private set; }
 
-        [field:Space(50)]
+        [field:Space(30)]
         [field: SerializeField] public int PrimaryWeaponID { get; private set; }
         [field: SerializeField] public int SecondaryWeaponID { get; private set; }
         [field: SerializeField] public int AdeptWeaponID { get; private set; }
         
-        [field:Space(50)]
+        [field:Space(30)]
         [field: SerializeField] public GameObject PrimaryWeaponContainer { get; private set; }
         [field: SerializeField] public GameObject SecondaryWeaponContainer { get; private set; }
         [field: SerializeField] public GameObject AdeptWeaponContainer { get; private set; }
         
-        [field:Space(50)]
+        [field:Space(30)]
         [field: SerializeField] public Weapon PrimaryWeapon { get; private set; }
         [field: SerializeField] public Weapon SecondaryWeapon { get; private set; }
         [field: SerializeField] public Weapon AdeptWeapon { get; private set; }
@@ -48,42 +48,40 @@ namespace WeaponSystem
 
         public Transform BulletSpawnPos;
 
+        
         private void Start()
         {
             if (PrimaryWeaponID != 0)
             {
-                ChangeWeapon(ELoadoutWeaponType.Primary, PrimaryWeaponID);
-                //Debug.Log("Primary Weapon Initialized");
+                ChangeWeapon(ELoadoutSlot.Primary, PrimaryWeaponID);
             }
 
             if (SecondaryWeaponID != 0)
             {
-                ChangeWeapon(ELoadoutWeaponType.Secondary, SecondaryWeaponID);
-                //Debug.Log("Secondary Weapon Initialized");
+                ChangeWeapon(ELoadoutSlot.Secondary, SecondaryWeaponID);
             }
             
             if (AdeptWeaponID != 0)
             {
-                ChangeWeapon(ELoadoutWeaponType.Adept, AdeptWeaponID);
-                //Debug.Log("Adept Weapon Initialized");
+                ChangeWeapon(ELoadoutSlot.Adept, AdeptWeaponID);
             }
             
-            SwitchWeaponTo(ELoadoutWeaponType.Primary);
+            SwitchWeaponTo(ELoadoutSlot.Primary);
         }
 
         private void Update()
         {
             SwitchWeapon();
             
-            switch (CurrentLoadoutWeaponType)
+            switch (CurrentLoadoutSlot)
             {
-                case ELoadoutWeaponType.Primary:
+                case ELoadoutSlot.Primary:
                     PrimaryWeaponFunction();
                     break;
-                case ELoadoutWeaponType.Secondary:
+                case ELoadoutSlot.Secondary:
                     SecondaryWeaponFunction();
                     break;
-                case ELoadoutWeaponType.Adept:
+                case ELoadoutSlot.Adept:
                     AdeptWeaponFunction();
                     break;
             }
@@ -102,19 +100,9 @@ namespace WeaponSystem
             
             graphicRep.transform.localRotation = Quaternion.Euler(0, 0, actualProjectileAngle);
             BulletSpawnPos.localRotation = Quaternion.Euler(0, 0, actualProjectileAngle);
-            //
-            // if (Input.GetKeyDown(KeyCode.C))
-            // {
-            //     ChangeWeapon(ELoadoutWeaponType.Primary,100003);
-            // }
-            //
-            // if (Input.GetKeyDown(KeyCode.V))
-            // {
-            //     ChangeWeapon(ELoadoutWeaponType.Primary,100001);
-            // }
         }
         
-        public void ChangeWeapon(ELoadoutWeaponType loadoutWeaponType,int id)
+        public void ChangeWeapon(ELoadoutSlot loadoutSlot,int id)
         {
             // Check if the argument weapon ID is valid
             if (!DatabaseUtil.IsValidWeaponID(id))
@@ -126,17 +114,17 @@ namespace WeaponSystem
             ItemDataEquipmentWeapon staticData = DatabaseUtil.Instance.GetItemDataEquipmentWeapon(id);
             RuntimeItemDataEquipmentWeapon runtimeData = new RuntimeItemDataEquipmentWeapon(staticData);
             
-            Weapon weaponToBeChanged = null;
-            Weapon newWeapon = null;
+            Weapon from = null; // The weapon before change.
+            Weapon to = null; // The weapon after change.
             
-            switch (loadoutWeaponType)
+            switch (loadoutSlot)
             {
-                case ELoadoutWeaponType.Primary:
-                    weaponToBeChanged = PrimaryWeapon;
+                case ELoadoutSlot.Primary:
+                    from = PrimaryWeapon;
                     
-                    if (weaponToBeChanged != null)
+                    if (from != null)
                     {
-                        Destroy(weaponToBeChanged.gameObject);
+                        Destroy(from.gameObject);
                     }
                     
                     if (staticData.WeaponType==EWeaponType.AR)
@@ -163,17 +151,17 @@ namespace WeaponSystem
                     
                     
                     // Build connection between the weapon and the loadout.
-                    PrimaryWeapon.LoadoutWeaponType = ELoadoutWeaponType.Primary;
+                    PrimaryWeapon.LoadoutSlot = ELoadoutSlot.Primary;
                     PrimaryWeapon.Loadout = this;
                     
-                    newWeapon = PrimaryWeapon;
+                    to = PrimaryWeapon;
                     break;
-                case ELoadoutWeaponType.Secondary:
-                    weaponToBeChanged = SecondaryWeapon;
+                case ELoadoutSlot.Secondary:
+                    from = SecondaryWeapon;
                     
-                    if (weaponToBeChanged != null)
+                    if (from != null)
                     {
-                        Destroy(weaponToBeChanged.gameObject);
+                        Destroy(from.gameObject);
                     }
                     
                     if (staticData.WeaponType==EWeaponType.AR)
@@ -199,17 +187,17 @@ namespace WeaponSystem
                     SecondaryWeaponEvents = SecondaryWeapon.Events;
                     
                     // Build connection between the weapon and the loadout.
-                    SecondaryWeapon.LoadoutWeaponType = ELoadoutWeaponType.Primary;
+                    SecondaryWeapon.LoadoutSlot = ELoadoutSlot.Primary;
                     SecondaryWeapon.Loadout = this;
                     
-                    newWeapon = SecondaryWeapon;
+                    to = SecondaryWeapon;
                     break;
-                case ELoadoutWeaponType.Adept:
-                    weaponToBeChanged = AdeptWeapon;
+                case ELoadoutSlot.Adept:
+                    from = AdeptWeapon;
                     
-                    if (weaponToBeChanged != null)
+                    if (from != null)
                     {
-                        Destroy(weaponToBeChanged.gameObject);
+                        Destroy(from.gameObject);
                     }
                     
                     if (staticData.WeaponType==EWeaponType.AR)
@@ -235,14 +223,16 @@ namespace WeaponSystem
                     AdeptWeaponEvents = AdeptWeapon.Events;
                     
                     // Build connection between the weapon and the loadout.
-                    AdeptWeapon.LoadoutWeaponType = ELoadoutWeaponType.Primary;
+                    AdeptWeapon.LoadoutSlot = ELoadoutSlot.Primary;
                     AdeptWeapon.Loadout = this;
                     
-                    newWeapon = SecondaryWeapon;
+                    to = AdeptWeapon;
                     break;
             }
 
-            OnChangeWeapon?.Invoke(loadoutWeaponType, weaponToBeChanged, newWeapon);
+            ChangeWeaponEventArgs args = new ChangeWeaponEventArgs(from, to, loadoutSlot);
+            
+            OnChangeWeapon?.Invoke(args);
         }
         
         /// <summary>
@@ -252,16 +242,16 @@ namespace WeaponSystem
         {
             if (PlayerInputHandler.IsSwitchToPrimaryWeaponPressedThisFrame && CurrentWeapon != PrimaryWeapon && PrimaryWeapon != null)
             {
-                SwitchWeaponTo(ELoadoutWeaponType.Primary);
+                SwitchWeaponTo(ELoadoutSlot.Primary);
             }
             else if (PlayerInputHandler.IsSwitchToSecondaryWeaponPressedThisFrame && CurrentWeapon != SecondaryWeapon &&
                      SecondaryWeapon != null)
             {
-                SwitchWeaponTo(ELoadoutWeaponType.Secondary);
+                SwitchWeaponTo(ELoadoutSlot.Secondary);
             }
             else if (PlayerInputHandler.IsSwitchToAdeptWeaponPressedThisFrame && CurrentWeapon != AdeptWeapon && AdeptWeapon != null)
             {
-                SwitchWeaponTo(ELoadoutWeaponType.Adept);
+                SwitchWeaponTo(ELoadoutSlot.Adept);
             }
         }
         
@@ -269,47 +259,41 @@ namespace WeaponSystem
         /// Switch weapon to a specific type.
         /// </summary>
         /// <param name="target">The specific type of weapon to switch to. </param>
-        private void SwitchWeaponTo(ELoadoutWeaponType target)
+        private void SwitchWeaponTo(ELoadoutSlot target)
         {
             switch (target)
             {
-                case ELoadoutWeaponType.Primary:
+                case ELoadoutSlot.Primary:
                     CurrentWeapon = PrimaryWeapon;
-                    CurrentLoadoutWeaponType = ELoadoutWeaponType.Primary;
+                    CurrentLoadoutSlot = ELoadoutSlot.Primary;
 
                     if (!_primaryInitialized)
                     {
-                        //PrimaryWeaponEvents = PrimaryWeapon.Events;
-
-                        OnInitializeWeapon?.Invoke();
+                        PrimaryWeaponEvents = PrimaryWeapon.Events;
                         _primaryInitialized = true;
                     }
 
                     break;
 
-                case ELoadoutWeaponType.Secondary:
+                case ELoadoutSlot.Secondary:
                     CurrentWeapon = SecondaryWeapon;
-                    CurrentLoadoutWeaponType = ELoadoutWeaponType.Secondary;
+                    CurrentLoadoutSlot = ELoadoutSlot.Secondary;
 
                     if (!_secondaryInitialized)
                     {
                         SecondaryWeaponEvents = SecondaryWeapon.Events;
-
-                        OnInitializeWeapon?.Invoke();
                         _secondaryInitialized = true;
                     }
 
                     break;
 
-                case ELoadoutWeaponType.Adept:
+                case ELoadoutSlot.Adept:
                     CurrentWeapon = AdeptWeapon;
-                    CurrentLoadoutWeaponType = ELoadoutWeaponType.Adept;
+                    CurrentLoadoutSlot = ELoadoutSlot.Adept;
 
                     if (!_adeptInitialized)
                     {
                         AdeptWeaponEvents = AdeptWeapon.Events;
-
-                        OnInitializeWeapon?.Invoke();
                         _adeptInitialized = true;
                     }
 
@@ -317,7 +301,7 @@ namespace WeaponSystem
             }
 
             CurrentWeapon.Setup();
-            //Debug.Log(OnSwitchWeapon.GetInvocationList().Length);
+
             OnSwitchWeapon?.Invoke(target);
         }
         

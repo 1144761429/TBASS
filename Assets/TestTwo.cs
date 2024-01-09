@@ -14,7 +14,7 @@ public class TestTwo : MonoBehaviour, IDamageable
 
     public GameObject Entity => gameObject;
 
-    public int Priority => 3;
+    public int TargetPriority => 3;
 
     public NavMeshAgent agent;
     public BoxCollider2D c;

@@ -1,91 +1,65 @@
-using System;
-using System.Collections.Generic;
-using BuffSystem.Common;
+﻿using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine;
 
 namespace WeaponSystem.DamagingEntities
 {
-    public class Bullet : DamagingEntity
+    public class Bullet : Projectile
     {
-        public event Action<GameObject> OnHitEnemy;
-        
-        public ObjectPool<Bullet> entityPool;
-        
-        public bool Traversing { get; set; }
-        private float _traveledDistance;
+        public Weapon ParentWeapon { get; private set; }
 
-        private void Update()
+        public ObjectPool<Bullet> ProjectilePool { get; private set; }
+
+        private new void Update()
         {
             if (gameObject.activeSelf && Traversing)
             {
-                _traveledDistance += Time.deltaTime * ParentWeapon.StaticData.BulletSpeed;
-
-                if (_traveledDistance >= ParentWeapon.StaticData.BulletTravelDistanceLimit)
+                TraveledDistance += Time.deltaTime * Rb.velocity.magnitude;
+                
+                if (TraveledDistance >= MaxTravelDistance)
                 {
-                    entityPool.Release(this);
+                    ProjectilePool.Release(this);
                 }
             }
         }
         
-        public void Init(Weapon weapon, ObjectPool<Bullet> pool, bool traverseAfterInit, Action<GameObject> onHitEnemy)
+        public void Init(Weapon weapon, GameObject parent, ObjectPool<Bullet> pool, bool enableAfterInit)
         {
-            base.Init(weapon);
+            base.Init(weapon.gameObject);
 
-            entityPool = pool;
+            ProjectilePool = pool;
             
-            Traversing = traverseAfterInit;
+            Traversing = enableAfterInit;
+            
+            ParentWeapon = weapon;
 
-            OnHitEnemy = onHitEnemy;
+            MaxTravelDistance = weapon.StaticData.BulletTravelDistanceLimit;
+            
+            OnHit = null;
+            OnHit += OnHitSomething;
         }
         
-        public void Init(Weapon weapon, ObjectPool<Bullet> pool, bool traverseAfterInit, List<Action<GameObject>> onHitEnemy)
+        private void OnHitSomething(GameObject other, Projectile bullet)
         {
-            base.Init(weapon);
-
-            entityPool = pool;
+            //Debug.Log($"hit {other.name}");
             
-            Traversing = traverseAfterInit;
-
-            foreach (var action in onHitEnemy)
+            if (other.layer == LayerMask.NameToLayer("Obstacle"))
             {
-                OnHitEnemy += action;
-            }
-        }
-
-
-        public void Reset()
-        {
-            _traveledDistance = 0;
-        }
-        
-        protected void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
-            {
-                entityPool.Release(this);
-                print("You hit a obstacle");
+                ProjectilePool.Release(this);
                 return;
             }
 
-            if (other.gameObject.CompareTag("Enemy"))
+            if (other.CompareTag("Enemy"))
             {
                 // float finalDmg =
                 //     ParentWeapon.StaticData.Damage * (1 + buffHandler.WeaponDamageModifier.GetWeaponDmgModValue() +
                 //                                 buffHandler.FinalDamageModifier.GetFinalDmgModValue());
-
-                OnHitEnemy?.Invoke(other.gameObject);
-                if (other.gameObject.TryGetComponent(out IDamageable damageable))
+                
+                if (other.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeDamage(ParentWeapon.StaticData.Damage);
                 }
-                else
-                {
-                    Debug.Log("Enemy is invincible.");
-                }
 
-                entityPool.Release(this);
-                print("You hit an Enemy");
+                ProjectilePool.Release(this);
             }
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using Characters.Player.Data;
 using StackableElement;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public class PlayerSpeedHandler : MonoBehaviour
     }
 
     private SpeedHandler<EPlayerSpeedElementType> _speedHandler;
-    private PlayerDataSO _data;
+    private RuntimePlayerData _data;
 
     private void Awake()
     {
@@ -25,11 +26,11 @@ public class PlayerSpeedHandler : MonoBehaviour
 
         _speedHandler = new SpeedHandler<EPlayerSpeedElementType>();
 
-        _speedHandler.Add(EPlayerSpeedElementType.Walk, new StackableElement<float>(_data.WalkSpeed, new IntWrapper(1),
+        _speedHandler.Add(EPlayerSpeedElementType.Walk, new StackableElement<float>(_data.WalkSpeedBase, new IntWrapper(1),
             new IntWrapper(0), new IntWrapper(0),
             new BoolWrapper(true)));
         _speedHandler.Add(EPlayerSpeedElementType.Run,
-            new StackableElement<float>(_data.SprintSpeed, new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
+            new StackableElement<float>(_data.SprintSpeedBase, new IntWrapper(1), new IntWrapper(0), new IntWrapper(0),
                 new BoolWrapper(true)));
     }
 

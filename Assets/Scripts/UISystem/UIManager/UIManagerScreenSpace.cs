@@ -18,11 +18,7 @@ public class UIManagerScreenSpace : UIManager
 
     private static UIManagerScreenSpace _instance;
 
-
-    private GameObject _inventoryPanelGameObj;
-
     public GameObject ChargeModuleBarGameObj { get; private set; }
-    public PanelChargeModuleBar ChargeModuleBarPanel { get; private set; }
 
     protected override void Awake()
     {
@@ -31,49 +27,34 @@ public class UIManagerScreenSpace : UIManager
         DontDestroyOnLoad(gameObject);
 
         // Basic HUD
-        OpenPanelFirstTime(EPanelType.PanelPlayerHealthBar);
-        OpenPanelFirstTime(EPanelType.PanelPlayerLoadout);
-        _inventoryPanelGameObj = OpenPanelFirstTime(EPanelType.PanelPlayerInventory);
-        OpenPanelFirstTime(EPanelType.PanelRecentAcquired);
-        OpenPanelFirstTime(EPanelType.PanelPlayerBuff);
+        // OpenPanelFirstTime(EPanelType.PanelPlayerHealthBar);
+        // OpenPanelFirstTime(EPanelType.PanelPlayerLoadout);
+        // OpenPanelFirstTime(EPanelType.PanelPlayerInventory);
+        // OpenPanelFirstTime(EPanelType.PanelRecentAcquired);
+        // OpenPanelFirstTime(EPanelType.PanelPlayerBuff);
 
-        ClosePanel(EPanelType.PanelPlayerInventory, _inventoryPanelGameObj.name);
+        // ClosePanel(EPanelType.PanelPlayerInventory, _inventoryPanelGameObj.name);
 
         // Weapon system related UI
-        ChargeModuleBarGameObj = OpenPanelFirstTime(EPanelType.PanelChargeModuleBar);
-        ChargeModuleBarPanel = ChargeModuleBarGameObj.GetComponent<PanelChargeModuleBar>();
-        ClosePanel(EPanelType.PanelChargeModuleBar, ChargeModuleBarGameObj.name);
+        // ChargeModuleBarGameObj = OpenPanelFirstTime(EPanelType.PanelChargeModuleBar);
+        // ChargeModuleBarPanel = ChargeModuleBarGameObj.GetComponent<PanelChargeModuleBar>();
+        // ClosePanel(EPanelType.PanelChargeModuleBar, ChargeModuleBarGameObj.name);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (_inventoryPanelGameObj.activeSelf)
-            {
-                ClosePanel(EPanelType.PanelPlayerInventory, _inventoryPanelGameObj.name);
-            }
-            else
-            {
-                OpenPanel(EPanelType.PanelPlayerInventory, _inventoryPanelGameObj.name);
-            }
-        }
-    }
-
-    public void UpdatePanelChargeModuleBar()
-    {
-        ChargeModuleBarPanel.UpdateVisual();
-    }
-
-    public void OpenPanelChargeModuleBar()
-    {
-        OpenPanel(EPanelType.PanelChargeModuleBar, ChargeModuleBarGameObj.name);
-    }
-
-    public void ClosePanelChargeModuleBar()
-    {
-        ClosePanel(EPanelType.PanelChargeModuleBar, ChargeModuleBarGameObj.name);
-    }
+    // private void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Tab))
+    //     {
+    //         if (_inventoryPanelGameObj.activeSelf)
+    //         {
+    //             ClosePanel(EPanelType.PanelPlayerInventory, _inventoryPanelGameObj.name);
+    //         }
+    //         else
+    //         {
+    //             OpenPanel(EPanelType.PanelPlayerInventory, _inventoryPanelGameObj.name);
+    //         }
+    //     }
+    // }
 
     // private void InitSingleton()
     // {

@@ -9,6 +9,6 @@ public interface IDamageable
     public event Action OnHPBelowZero;
     
     public GameObject Entity { get; }
-    public int Priority { get; }
+    public int TargetPriority { get; }
     public void TakeDamage(float damage);
 }

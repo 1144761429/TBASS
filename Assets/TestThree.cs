@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using InventorySystem.Common.EventArgument;
+using JetBrains.Annotations;
 using UnityEngine;
 
 
 public class TestThree : MonoBehaviour
 {
-    public int MyInt;
-    public int MyInt2 => 4;
-    public int MyInt3 { get; set; }
+    public Renderer testObj;
 
-    public List<GameObject> obs1;
-    public List<GameObject> obs2;
-    public List<GameObject> obs3 { get; set; }
-    public PriorityQueue<GameObject, int> ppp { get; set; }
+
+    private void Update()
+    {
+        //Debug.Log(testObj.isVisible);
+    }
 }

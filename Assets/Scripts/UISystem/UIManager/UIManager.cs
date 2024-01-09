@@ -2,126 +2,171 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
+using WeaponSystem;
 
 namespace UISystem
 {
     public abstract class UIManager : MonoBehaviour
     {
-        [SerializeField] protected List<GameObject> _panelPrefabList;
-        protected Dictionary<EPanelType, GameObject> _cachedPanelPrefabDict;
-        protected Dictionary<string, PanelBase> _instantiatedPanelGameObjDict;
-        protected Dictionary<string, PanelBase> _activePanelGameObjDict;
+        [Tooltip("List of UI prefabs that will be cached but not opened when Awake() is called.")] [SerializeField]
+        protected List<GameObject> uiPrefabsToCache;
+
+        [Tooltip("List of UI prefabs that will be cached and opened when Awake() is called.")] [SerializeField]
+        protected List<GameObject> uiPrefabsToInstantiate;
+
+        [Tooltip("List of UI prefabs that will be cached and opened when Awake() is called.")] [SerializeField]
+        protected List<GameObject> uiPrefabsToOpen;
 
         [Tooltip("The default parent transform of where the panel will be instantiated and attached to.")]
         [field: SerializeField]
         public Transform DefaultRoot { get; private set; }
 
+        protected Dictionary<EUIType, GameObject> cachedUIDict;
+        protected Dictionary<EUIType, List<UIController>> instantiatedUIDict;
+        protected Dictionary<EUIType, List<UIController>> activeUIDict;
+        
+
         protected virtual void Awake()
         {
-            _cachedPanelPrefabDict = new Dictionary<EPanelType, GameObject>();
-            _instantiatedPanelGameObjDict = new Dictionary<string, PanelBase>();
-            _activePanelGameObjDict = new Dictionary<string, PanelBase>();
+            cachedUIDict = new Dictionary<EUIType, GameObject>();
+            instantiatedUIDict = new Dictionary<EUIType, List<UIController>>();
+            activeUIDict = new Dictionary<EUIType, List<UIController>>();
 
-            CachePanels();
+            // Check if any two of the three list of UI prefab related have overlaps, if do, throw an exception.
+
+            if (uiPrefabsToCache.Intersect(uiPrefabsToInstantiate).Any())
+            {
+                throw new Exception(
+                    $"The lists {nameof(uiPrefabsToCache)} and {nameof(uiPrefabsToCache)} have overlaps. Please make sure there is no overlaps.");
+            }
+
+            if (uiPrefabsToCache.Intersect(uiPrefabsToOpen).Any())
+            {
+                throw new Exception(
+                    $"The lists {nameof(uiPrefabsToCache)} and {nameof(uiPrefabsToOpen)} have overlaps. Please make sure there is no overlaps.");
+            }
+
+            if (uiPrefabsToInstantiate.Intersect(uiPrefabsToOpen).Any())
+            {
+                throw new Exception(
+                    $"The lists {nameof(uiPrefabsToInstantiate)} and {nameof(uiPrefabsToOpen)} have overlaps. Please make sure there is no overlaps.");
+            }
+
+
+            // All the UI prefabs that needs to be processed.
+            List<GameObject> uiPrefabs = uiPrefabsToCache.Union(uiPrefabsToInstantiate).Union(uiPrefabsToOpen).ToList();
+
+            // Cache all the UIs.
+            foreach (var uiPrefab in uiPrefabs)
+            {
+                if (uiPrefab.TryGetComponent(out UIController controller))
+                {
+                    //Debug.Log(controller.Model == null);
+                    cachedUIDict.Add(controller.Type, uiPrefab);
+                }
+                else
+                {
+                    throw new MissingComponentException(
+                        $"The UI prefab {uiPrefab.name} is missing the component of PanelBase to properly cache.");
+                }
+            }
+
+            // Instantiate the UIs that is in the list of UIs prefabs to instantiate and to open.
+            // Then, close the panel that is not listed in the list of UIs to open but only to instantiate.
+            foreach (var uiPrefab in uiPrefabsToInstantiate.Union(uiPrefabsToOpen))
+            {
+                UIController uiController =
+                    CreateUI(uiPrefab.GetComponent<UIController>().Type).GetComponent<UIController>();
+                
+                if (!uiPrefabsToOpen.Contains(uiPrefab))
+                {
+                    CloseUI(uiController.Type, uiController.Model.ID);
+                }
+            }
 
             //DebugCachedPanelPrefabDict();
         }
 
-        private void CachePanels()
-        {
-            if (_panelPrefabList.Count == 0)
-            {
-                Debug.LogWarning(
-                    "No panel prefab is stored in the panel Prefab List. Please assign panel prefab before cache them.");
-                return;
-            }
-
-            foreach (var panelPrefab in _panelPrefabList)
-            {
-                if (panelPrefab.TryGetComponent(out PanelBase panelBase))
-                {
-                    if (!_cachedPanelPrefabDict.TryAdd(panelBase.Type, panelPrefab))
-                    {
-                        throw new Exception("Trying to cache a panel with the same panel type enum" +
-                                            $"\nPanel enum: {panelPrefab.GetComponent<PanelBase>().Type}. " +
-                                            $"\nName of the panel prefab that has the same type: {_cachedPanelPrefabDict[panelBase.Type].name}.");
-                    }
-                }
-                else
-                {
-                    throw new Exception("Trying to cache a panel prefab with no PanelBase script attached to it." +
-                                        $"\nPanelPrefab name: {panelPrefab.name}.");
-                }
-            }
-        }
-
-        public GameObject OpenPanel(EPanelType panelType, string panelID = "", Transform root = null)
+        public bool OpenUI(EUIType uiType, int uiID, Transform root = null)
         {
             // Check if the panel has been cached.
             // If not, throw an exception indicating the cached prefab cannot be found.
-            if (!_cachedPanelPrefabDict.TryGetValue(panelType, out GameObject cachedPanelPrefab))
+            if (!cachedUIDict.TryGetValue(uiType, out GameObject cachedPanelPrefab))
             {
                 throw new KeyNotFoundException("Trying to open a panel with a panel type enum that is not cached." +
-                                               $"\n Panel type enum: {panelType}");
+                                               $"\n Panel type enum: {uiType}.");
             }
 
             // Check if the panel is already open.
-            // If so, return the method instantly.
-            if (_activePanelGameObjDict.ContainsKey(panelID))
+            if (activeUIDict.ContainsKey(uiType) &&
+                activeUIDict[uiType].FirstOrDefault(controller => controller.Model.ID == uiID) != null)
             {
-                Debug.LogWarning("Trying to open a panel that has already been opened in scene." +
-                                 $"\n Panel ID: {panelID}");
-                return null;
+                Debug.LogError("Trying to open a panel that has already been opened in scene." +
+                               $"\n Panel UIType: {uiType}, Panel ID: {uiID}.");
+                return false;
             }
 
             // Check if the panel has not yet been instantiated
-            // Case of if the panel has not been instantiated
-            if (_instantiatedPanelGameObjDict.Values.FirstOrDefault(panel => panel.Type == panelType) == null)
+            if (!instantiatedUIDict.ContainsKey(uiType))
             {
-                Debug.LogWarning("Trying to open a panel that has not been instantiated." +
-                                 $"\n Panel ID: {panelID}");
+                Debug.LogError("Trying to open a panel that has not been instantiated." +
+                               $"\n Panel UIType: {uiType}.");
+                return false;
             }
 
+            // The controller that will be used to open the UI.
+            UIController targetController =
+                instantiatedUIDict[uiType].FirstOrDefault(controller => controller.Model.ID == uiID);
 
-            if (!_instantiatedPanelGameObjDict.ContainsKey(panelID))
+            // Check if the panel has been instantiated but the ID of the UI to open does not exist.
+            if (targetController == null)
             {
-                Debug.LogWarning(
-                    "Trying to open a panel that exists in the scene but the passed in parameter panelID is incorrect." +
-                    $"Panel type: {panelType}, Panel ID: {panelID}");
-                return null;
+                Debug.LogError("Trying to open a panel that has been instantiated but the ID is does not exist." +
+                               $"\n Panel UIType: {uiType}, Panel ID: {uiID}." +
+                               $"Please check if the parameter ID is correct.");
+
+                return false;
             }
 
-            _instantiatedPanelGameObjDict[panelID].Open();
-            _activePanelGameObjDict.Add(_instantiatedPanelGameObjDict[panelID].name,
-                _instantiatedPanelGameObjDict[panelID].GetComponent<PanelBase>());
+            targetController.Open();
+            activeUIDict[uiType].Add(targetController);
 
-            return _instantiatedPanelGameObjDict[panelID].gameObject;
+            return true;
         }
 
 
-        public GameObject OpenPanelFirstTime(EPanelType panelType, Transform root = null)
+        public GameObject CreateUI(EUIType uiType, Transform root = null)
         {
+            if (uiType == EUIType.Component)
+            { 
+                Debug.LogError("A UI of type Component cannot be created. It has to come with a parent UI that contains the component.");
+            }
+            
             // Check if the panel has been cached.
             // If not, throw an exception indicating the cached prefab cannot be found.
-            if (!_cachedPanelPrefabDict.TryGetValue(panelType, out GameObject cachedPanelPrefab))
+            if (!cachedUIDict.TryGetValue(uiType, out GameObject cachedUIPrefab))
             {
                 throw new KeyNotFoundException("Trying to open a panel with a panel type enum that is not cached." +
-                                               $"\n Panel type enum: {panelType}");
+                                               $"\n Panel type enum: {uiType}");
             }
 
-            PanelBase targetPanelBase =
-                _instantiatedPanelGameObjDict.Values.FirstOrDefault(panel => panel.Type == panelType);
-
-            if (!cachedPanelPrefab.GetComponent<PanelBase>().CanHaveMultiple && targetPanelBase != null)
+            // Check if the UI to open for the first time have had instance in the scene and is not allowed to have multiple instances.
+            if (instantiatedUIDict.TryGetValue(uiType, out List<UIController> controllers))
             {
-                Debug.LogWarning("Trying to open a panel that cannot have multiple instance in the scene." +
-                                 $"Panel type: {panelType}.");
-                return null;
+                UIController targetController =
+                    controllers.FirstOrDefault(controller => controller.Model.Type == uiType);
+                
+                if (!cachedUIPrefab.GetComponent<UIController>().CanHaveMultiple && targetController != null)
+                {
+                    Debug.LogWarning(
+                        "Trying to open a panel that cannot have multiple instance in the scene, and there is already instance of it in the scene." +
+                        $"Panel type: {uiType}.");
+                    return null;
+                }
             }
-
 
             // Check if there is no specified root transform for the instantiation while default instantiation transform is null as well.
-            // If so, throw an exception suggesting to set a default instantiation transform for the panel prefab.
             if (root == null)
             {
                 if (DefaultRoot == null)
@@ -129,106 +174,82 @@ namespace UISystem
                     throw new NullReferenceException(
                         $"Trying to open a panel at default root transform but the default root transform has not been assigned a value." +
                         $"\nPlease assign a value to the default room transform in the inspector of the panel prefab." +
-                        $"\nPanel type: {panelType}");
+                        $"\nPanel type: {uiType}.");
                 }
 
                 root = DefaultRoot;
             }
+            
+            GameObject panelGameObject = Instantiate(cachedUIPrefab, root, false);
+            UIController controller = panelGameObject.GetComponent<UIController>();
+            instantiatedUIDict.Add(uiType, new List<UIController>());
+            instantiatedUIDict[uiType].Add(controller);
+            activeUIDict.Add(uiType, new List<UIController>());
+            activeUIDict[uiType].Add(controller);
 
-            GameObject panelGameObject = Instantiate(cachedPanelPrefab, root, false);
-            PanelBase panelBase = panelGameObject.GetComponent<PanelBase>();
-            _instantiatedPanelGameObjDict.Add(panelGameObject.name, panelBase);
-            _activePanelGameObjDict.Add(panelGameObject.name, panelBase);
-            panelBase.Init();
-            panelBase.Open();
+            controller.Open();
 
             return panelGameObject;
         }
 
-        public void ClosePanel(EPanelType panelType, string panelID)
+        public bool CloseUI(EUIType uiType, int uiID)
         {
-            // Check if the panel has been cached.
-            // If not, throw an exception indicating the cached prefab cannot be found.
-            if (!_cachedPanelPrefabDict.TryGetValue(panelType, out GameObject cachedPanelPrefab))
+            // Check if the UI has been cached.
+            if (!cachedUIDict.TryGetValue(uiType, out GameObject cachedUIPrefab))
             {
-                throw new KeyNotFoundException("Trying to close a panel with a panel type enum that is not cached." +
-                                               $"\n Panel enum: {panelType}");
+                throw new KeyNotFoundException("Trying to close a UI with a UI type enum that is not cached." +
+                                               $"\n UI type: {uiType}.");
             }
 
-            if (!cachedPanelPrefab.GetComponent<PanelBase>().CanClose)
+            // Check if the UI is allowed to close.
+            if (!cachedUIPrefab.GetComponent<UIController>().CanClose)
             {
-                Debug.LogWarning("Trying to close a panel that cannot be closed currently." +
-                                 $"\n Panel enum: {panelType}");
-                return;
+                Debug.LogWarning("Trying to close a UI that cannot be closed currently." +
+                                 $"\n UI type: {uiType}");
+                return false;
             }
 
-            // Check if the panel is instantiated.
-            // If not, return the method instantly.
-            if (!_instantiatedPanelGameObjDict.ContainsKey(panelID))
+            // Check if the UI is instantiated.
+            if (!instantiatedUIDict.ContainsKey(uiType))
             {
-                Debug.LogWarning("Trying to close a panel that is not instantiated." +
-                                 $"Panel ID: {panelID}.");
+                throw new Exception("Trying to close a UI that is not instantiated." +
+                                    $"UI type: {uiType}.");
             }
-            else
+
+            UIController targetController =
+                activeUIDict[uiType].FirstOrDefault(controller => controller.Model.ID == uiID);
+
+            // Check if the UI is instantiated but the parameter uiID does not exist.
+            if (targetController == null)
             {
-                if (!_activePanelGameObjDict.ContainsKey(panelID))
-                {
-                    Debug.LogWarning("Trying to close a panel that has already been closed in scene." +
-                                     $"\n Panel ID: {panelID}");
-                }
-                else
-                {
-                    _activePanelGameObjDict[panelID].Close();
-                    _activePanelGameObjDict.Remove(panelID);
-                }
+                Debug.LogWarning("Trying to close a UI that has already been closed in scene." +
+                                 $"\n UI ID: {uiID}");
+                return false;
             }
+
+
+            targetController.Close();
+            activeUIDict[uiType].Remove(targetController);
+
+            return true;
         }
 
         /// <summary>
         /// Close all the panels that can be closed.
         /// </summary>
-        public void CloseAllPanels()
+        public void CloseAllUIs()
         {
-            foreach (var panelBase in _activePanelGameObjDict.Values)
+            foreach (var controllers in activeUIDict.Values)
             {
-                if (panelBase.CanClose)
+                foreach (var controller in controllers)
                 {
-                    panelBase.Close();
-                    _activePanelGameObjDict.Remove(panelBase.gameObject.name);
+                    if (controller.CanClose)
+                    {
+                        controller.Close();
+                        controllers.Remove(controller);
+                    }
                 }
             }
-        }
-
-        public void RemovePanelGameObj(EPanelType panelType, string panelID)
-        {
-            // Check if the panel has been cached.
-            // If not, throw an exception indicating the cached prefab cannot be found.
-            if (!_cachedPanelPrefabDict.TryGetValue(panelType, out GameObject cachedPanelPrefab))
-            {
-                throw new KeyNotFoundException("Trying to remove a panel with a panel type enum that is not cached." +
-                                               $"\n Panel enum: {panelType}");
-            }
-
-            // Check if the panel is instantiated
-            if (!_instantiatedPanelGameObjDict.ContainsKey(panelID))
-            {
-                Debug.LogError(
-                    "Trying to destroy a panel GameObject in scene that neither has an invalid panelID nor is instantiated in the scene." +
-                    $"\nPanel ID: {panelID}");
-                return;
-            }
-
-            // Check if the panel is currently open in the scene.
-            // If so, close it first.
-            // Then destroy the panel GameObject and remove it from instantiated-panel and cached-panel dictionary
-
-            if (_activePanelGameObjDict.ContainsKey(panelID))
-            {
-                ClosePanel(panelType, panelID);
-            }
-
-            Destroy(_instantiatedPanelGameObjDict[panelID].gameObject);
-            _instantiatedPanelGameObjDict.Remove(panelID);
         }
 
         #region Debug Util
@@ -237,7 +258,7 @@ namespace UISystem
         {
             string str = "----------Cached Panel Prefab Dict----------\n";
 
-            foreach (var kyPair in _cachedPanelPrefabDict)
+            foreach (var kyPair in cachedUIDict)
             {
                 str += $"{kyPair.Key} --- {kyPair.Value}\n";
             }
@@ -249,3 +270,4 @@ namespace UISystem
         #endregion
     }
 }
+    

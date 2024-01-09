@@ -33,12 +33,12 @@ namespace WeaponSystem
             add
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.BeforeCheckShootCondition += value;
+                    _shootingModule.BeforeCheckLaunchCondition += value;
             }
             remove
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.BeforeCheckShootCondition -= value;
+                    _shootingModule.BeforeCheckLaunchCondition -= value;
             }
         }
 
@@ -47,12 +47,12 @@ namespace WeaponSystem
             add
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.ShootCondition += value;
+                    _shootingModule.PrimaryLaunchCondition += value;
             }
             remove
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.ShootCondition -= value;
+                    _shootingModule.PrimaryLaunchCondition -= value;
             }
         }
         
@@ -61,12 +61,12 @@ namespace WeaponSystem
             add
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.SecondaryShootCondition += value;
+                    _shootingModule.SecondaryLaunchCondition += value;
             }
             remove
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.SecondaryShootCondition -= value;
+                    _shootingModule.SecondaryLaunchCondition -= value;
             }
         }
         
@@ -89,12 +89,12 @@ namespace WeaponSystem
             add
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.AfterShoot += value;
+                    _shootingModule.AfterLaunch += value;
             }
             remove
             {
                 if (!ShootingModuleNullityCheck())
-                    _shootingModule.AfterShoot -= value;
+                    _shootingModule.AfterLaunch -= value;
             }
         }
         
@@ -107,38 +107,40 @@ namespace WeaponSystem
         {
             add
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.BeforeReload += value;
+                if (!IsAmmunitionModuleNull()) _ammunitionModule.BeforeReload += value;
             }
             remove
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.BeforeReload -= value;
+                if (!IsAmmunitionModuleNull()) _ammunitionModule.BeforeReload -= value;
             }
         }
         public event Action OnReload
         {
             add
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.OnReload += value;
+                if (!IsAmmunitionModuleNull()) _ammunitionModule.OnReload += value;
             }
             remove
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.OnReload -= value;
+                if (!IsAmmunitionModuleNull()) _ammunitionModule.OnReload -= value;
             }
         }
         
-        public event Action<GameObject> OnHitEnemy
+        public event Action<GameObject, Projectile> OnHitEnemy
         {
             add
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.OnHitEnemy += value;
+                if (!IsAmmunitionModuleNull()) _ammunitionModule.OnHitEnemy += value;
             }
             remove
             {
-                if (!AmmunitionModuleNullityCheck()) _ammunitionModule.OnHitEnemy -= value;
+                if (!IsAmmunitionModuleNull()) _ammunitionModule.OnHitEnemy -= value;
             }
         }
-        public bool HaveAmmoInMag => !AmmunitionModuleNullityCheck() && _ammunitionModule.HaveAmmoInMag;
-        public bool IsReloading => !AmmunitionModuleNullityCheck() && _ammunitionModule.IsReloading;
+
+        public Bullet Bullet => IsAmmunitionModuleNull() ? null : _ammunitionModule.Bullet;
+        public bool HaveAmmoInMag => !IsAmmunitionModuleNull() && _ammunitionModule.HaveAmmoInMag;
+        public bool IsReloading => !IsAmmunitionModuleNull() && _ammunitionModule.IsReloading;
 
         public Bullet[] GetBullet(int amount)
         {
@@ -161,7 +163,7 @@ namespace WeaponSystem
         /// Check if the <c>ammunitionModule</c> is null.
         /// </summary>
         /// <returns>True if <c>ammunitionModule</c> is null. Otherwise, false.</returns>
-        private bool AmmunitionModuleNullityCheck()
+        private bool IsAmmunitionModuleNull()
         {
             if (_ammunitionModule == null)
             {
