@@ -4,14 +4,16 @@ namespace Characters.Enemies
 {
     public class DummyStats : EnemyStats
     {
+        public override EnemyData StaticData { get; protected set; }
+        
         public float MaxHealth;
         
         public float CurrentHealth { get; private set; }
 
-        public override EnemyData StaticData
+        protected override void InitializeData()
         {
-            get => throw new System.NotImplementedException();
-            protected set => throw new System.NotImplementedException();
+            StaticData = DatabaseUtil.Instance.GetEnemyData(ID);
+            RuntimeData = new PatrolRioterRuntime(StaticData);
         }
     }
 }
