@@ -10,9 +10,11 @@ namespace Characters.Enemies.Data.Stats
         public EnemySpeedHandler SpeedHandler { get; private set; }
         private PatrolRioterRuntimeData _runtimeData => RuntimeData as PatrolRioterRuntimeData;
 
-        protected void Awake()
+        protected override void InitializeData()
         {
             StaticData = DatabaseUtil.Instance.GetEnemyData(ID);
+            RuntimeData = new PatrolRioterRuntime(StaticData);
+            
             SpeedHandler = new EnemySpeedHandler(_enemy, StaticData as PatrolRioterData);
         }
 
